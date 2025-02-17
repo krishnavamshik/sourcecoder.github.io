@@ -52,13 +52,13 @@
             border-radius: 5px;
             list-style: none;
         }
-        .project-list a, .donate-btn {
+        .project-list a {
             color: #ff5722;
             text-decoration: none;
             font-size: 18px;
             display: block;
         }
-        .donate-btn {
+        .donate-btn, .download-btn {
             padding: 8px 12px;
             background-color: #ff5722;
             color: white;
@@ -66,6 +66,16 @@
             cursor: pointer;
             margin-top: 5px;
             border-radius: 5px;
+            display: block;
+            text-align: center;
+        }
+        .download-btn {
+            background-color: grey;
+            cursor: not-allowed;
+        }
+        .download-btn.enabled {
+            background-color: #4CAF50;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -88,11 +98,23 @@
                     <h2>Available Projects</h2>
                     <ul class="project-list">
                         <li>
-                            LoRa Project (STM32WLE5 Mini)
-                            <button class="donate-btn" onclick="donateNow('LoRa Project')">Donate</button>
+                            <strong>LoRa Project (STM32WLE5 Mini)</strong><br>
+                            <a href="https://github.com/yourrepo/lora_project" target="_blank">View Repository</a>
+                            <button class="donate-btn" onclick="donateNow('LoRa Project', 'download1')">Donate to Download</button>
+                            <button id="download1" class="download-btn" disabled>Download</button>
                         </li>
-                        <li><a href="projects/project2/index.html" target="_blank">Project 2</a></li>
-                        <li><a href="projects/project3/index.html" target="_blank">Project 3</a></li>
+                        <li>
+                            <strong>Project 2</strong><br>
+                            <a href="https://github.com/yourrepo/project2" target="_blank">View Repository</a>
+                            <button class="donate-btn" onclick="donateNow('Project 2', 'download2')">Donate to Download</button>
+                            <button id="download2" class="download-btn" disabled>Download</button>
+                        </li>
+                        <li>
+                            <strong>Project 3</strong><br>
+                            <a href="https://github.com/yourrepo/project3" target="_blank">View Repository</a>
+                            <button class="donate-btn" onclick="donateNow('Project 3', 'download3')">Donate to Download</button>
+                            <button id="download3" class="download-btn" disabled>Download</button>
+                        </li>
                     </ul>
                 `;
                 contentDiv.style.display = 'block';
@@ -115,7 +137,7 @@
             });
         }
 
-        function donateNow(projectName) {
+        function donateNow(projectName, downloadBtnId) {
             var options = {
                 "key": "YOUR_RAZORPAY_KEY", 
                 "amount": 10000,  // Default ₹100 (user can modify this in Razorpay UI)
@@ -124,6 +146,7 @@
                 "description": "Support " + projectName,
                 "handler": function (response) {
                     alert('Thank you for your donation!');
+                    enableDownload(downloadBtnId);
                 },
                 "prefill": {
                     "name": "",
@@ -135,6 +158,16 @@
             };
             var rzp = new Razorpay(options);
             rzp.open();
+        }
+
+        function enableDownload(downloadBtnId) {
+            let btn = document.getElementById(downloadBtnId);
+            btn.disabled = false;
+            btn.classList.add("enabled");
+            btn.textContent = "Download Now";
+            btn.onclick = function() {
+                window.location.href = `https://github.com/yourrepo/${downloadBtnId}/archive/main.zip`;
+            };
         }
     </script>
 </body>
