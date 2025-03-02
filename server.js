@@ -15,7 +15,12 @@ const pool = new Pool({
   ssl: process.env.DATABASE_URL.includes("render.com") ? { rejectUnauthorized: false } : false,
 });
 
-app.use(cors());
+app.use(cors({
+    origin: "*", // Allow all origins
+    methods: "GET,POST",
+    allowedHeaders: "Content-Type",
+  }));
+  
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public"))); // <-- Serve static files
 
@@ -58,6 +63,6 @@ app.post("/signup", async (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
