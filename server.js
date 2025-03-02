@@ -22,13 +22,12 @@ app.use(cors({
   }));
   
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public"))); // <-- Serve static files
+app.use(express.static(path.join(__dirname, "public")));
 
 // Route to serve GEA.html
-app.get("/gea", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "GEA.html"));
-});
-
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  });
 // Create table if it doesn't exist
 const createTable = async () => {
   try {
@@ -46,21 +45,27 @@ const createTable = async () => {
 };
 createTable();
 
-// Handle Signup
 app.post("/signup", async (req, res) => {
-  const { name, email } = req.body;
-  if (!name || !email) {
-    return res.status(400).json({ error: "Name and email are required" });
-  }
-
-  try {
-    await pool.query("INSERT INTO signups (name, email) VALUES ($1, $2)", [name, email]);
-    res.status(200).json({ message: "✅ Signup successful" });
-  } catch (error) {
-    console.error("❌ Signup error:", error);
-    res.status(500).json({ error: "Database error" });
-  }
-});
+    console.log("📩 Received signup request:", req.body); // Log the request
+    
+    const { name, email } = req.body;
+    if (!name || !email) {
+      console.log("❌ Missing name or email");
+      return res.status(400).json({ error: "Name and email are required" });
+    }
+  
+    try {
+      const result = await pool.query(
+        "INSERT INTO signups (name, email) VALUES ($1, $2) RETURNING *",
+        [name, email]
+      );
+      console.log("✅ Inserted into DB:", result.rows[0]); // Log inserted data
+      res.status(200).json({ message: "✅ Signup successful" });
+    } catch (error) {
+      console.error("❌ Signup error:", error);
+      res.status(500).json({ error: "Database error" });
+    }
+  });
 
 // Start Server
 app.listen(PORT, "0.0.0.0", () => {
