@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // Use Render's assigned port
 const SIGNUPS_FILE = "signups.json";
 
 app.use(cors());
@@ -43,6 +43,6 @@ app.post("/signup", (req, res) => {
   res.status(200).json({ message: "Signup successful" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
+  });
