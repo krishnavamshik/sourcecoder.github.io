@@ -1,0 +1,126 @@
+<html>
+<head>
+    <title>GEA - Your AI-Powered Learning Companion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f7f7f7, #e3e3e3);
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .hero {
+            background: #4A90E2;
+            color: white;
+            padding: 50px 20px;
+            border-radius: 10px;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .section {
+            margin: 50px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .diagram {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .cta {
+            background: #4A90E2;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: auto;
+        }
+        .signup-form input {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .signup-form button {
+            background: #4A90E2;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+    </style>
+    <script>
+        function submitSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            fetch('http://localhost:3000/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>🚀 Welcome to GEA – Your AI-Powered Learning Companion!</h1>
+            <p>Do you have a goal to learn something but don’t know where to start?</p>
+            <p>Are you struggling to grasp complex concepts and wish for a course tailored just for you?</p>
+            <p>Have you started learning something but feel lost on what’s next?</p>
+            <p><b>If any of this sounds familiar, GEA is here to help!</b></p>
+        </div>
+        
+        <div class="section">
+            <h2>How GEA Works</h2>
+            <p>Imagine you want to become an astronaut. Your journey starts with mastering Newton’s Laws. But how do you ensure a smooth learning experience?</p>
+            <p>With GEA, you get:</p>
+            <ul>
+                <li>✅ A structured roadmap designed for your goal</li>
+                <li>✅ AI-powered personalized teaching based on your learning style</li>
+                <li>✅ Interactive simulations to help you experiment and understand concepts deeply</li>
+            </ul>
+            <div class="diagram">
+                <img src="GEA.png" alt="GEA Learning Process Diagram" width="80%">
+            </div>
+            <p>GEA adapts to your learning pace and keeps you on track, ensuring you never feel stuck again.</p>
+        </div>
+        
+        <div class="section">
+            <h2>💡 Join the Waitlist Today!</h2>
+            <p>Take the first step toward smarter learning.</p>
+            <form class="signup-form" onsubmit="submitSignup(event)">
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="email" id="email" placeholder="Your Email" required>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
