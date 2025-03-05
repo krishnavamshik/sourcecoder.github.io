@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEA Early Access - Learn Newton's Laws</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f7f7f7, #e3e3e3);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1,
+        h2 {
+            color: #4A90E2;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .law-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .simulation-placeholder {
+            background: #f9f9f9;
+            border: 1px dashed #ccc;
+            /* Smaller border thickness */
+            padding: 10px;
+            /* Reduced padding */
+            text-align: center;
+            margin-top: 20px;
+            border-radius: 5px;
+            /* Smaller border radius */
+            height: 450px;
+            /* Adjusted height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            /* Prevent overflow */
+        }
+
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            margin: 0 290px;
+            padding: 10px 30px;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Learn Newton's Laws of Motion</h1>
+        <p>Welcome to GEA’s Early Access! 🚀 Get ready to experience Newton’s Laws of Motion like never before! 
+            This is just the beginning—a sneak peek into how GEA will make learning interactive, fun, and intuitive.
+             Dive into hands-on simulations that bring physics to life, explore how forces shape movement,
+             and see science in action. This is an early access version, 
+             designed to give you a glimpse of what’s coming next—stay tuned for more!</p>
+
+        <!-- First Law Section -->
+        <div class="law-section">
+            <h2>First Law: The Law of Inertia</h2>
+            <p><strong>"An object at rest stays at rest, and an object in motion stays in motion unless acted upon by an
+                    external force."</strong></p>
+            <p><strong>What does this mean?</strong> Imagine a soccer ball lying on the ground. It won’t move unless you
+                kick it. Similarly, if you roll the ball, it will keep rolling forever unless something stops it (like
+                friction or gravity).</p>
+            <p><strong>Key Idea:</strong> Objects resist changes to their state of motion. This resistance is called
+                <strong>inertia</strong>.
+            </p>
+            <div id="first-law-simulation" class="simulation-placeholder">           
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToNextSimulation() {
+            window.location.href = 'newtons_secondlaw.html';
+        }
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+
+    <!-- p5.js Simulation for First Law -->
+    <script>
+        let bigX = 300, bigY = 200, bigVX = 0, bigVY = 0; // Large ball
+        let smallX, smallY, smallVX = 0, smallVY = 0; // Small ball
+        let dragging = false, launchX, launchY; // Slingshot controls
+        let gravity = 0.2, friction = 0.99, restitution = 0.6; // Restitution is bounce efficiency
+
+        function setup() {
+            const canvas = createCanvas(600, 400);
+            canvas.parent('first-law-simulation'); // Attach to the simulation div
+            smallX = width / 4;
+            smallY = height - 50;
+        }
+
+        function draw() {
+            background(220);
+
+            // Display Instructions
+            fill(0);
+            textSize(14);
+            text("Slingshot Simulation", 20, 20);
+            text("Drag & release the small ball to launch it.", 20, 40);
+            text("Watch it collide and move the big ball!", 20, 60);
+            text("Both balls will bounce off the walls and ground.", 20, 80);
+
+            // Apply gravity to both balls
+            bigVY += gravity;
+            smallVY += gravity;
+
+            // Apply motion & friction to large ball
+            bigVX *= friction;
+            bigVY *= friction;
+            bigX += bigVX;
+            bigY += bigVY;
+
+            // Apply motion to small ball
+            smallX += smallVX;
+            smallY += smallVY;
+            smallVX *= friction;
+            smallVY *= friction;
+
+            // Ball Collision Detection (Basic Elastic Collision)
+            let dx = bigX - smallX;
+            let dy = bigY - smallY;
+            let dist = sqrt(dx * dx + dy * dy);
+
+            if (dist < 50) { // If the small ball hits the big ball
+                let angle = atan2(dy, dx);
+                let speed = sqrt(smallVX * smallVX + smallVY * smallVY);
+
+                bigVX = speed * cos(angle);
+                bigVY = speed * sin(angle);
+
+                smallVX = -bigVX * 0.5; // Reverse small ball speed
+                smallVY = -bigVY * 0.5;
+            }
+
+            // **Boundary Collision for Large Ball**
+            if (bigX < 25 || bigX > width - 25) {
+                bigVX *= -1;
+                bigX = constrain(bigX, 25, width - 25);
+            }
+            if (bigY > height - 25) { // Hits ground
+                bigVY *= -restitution;
+                bigY = height - 25;
+                if (abs(bigVY) < 0.5) bigVY = 0; // Stop bouncing when very slow
+            }
+
+            // **Boundary Collision for Small Ball**
+            if (smallX < 10 || smallX > width - 10) {
+                smallVX *= -1;
+                smallX = constrain(smallX, 10, width - 10);
+            }
+            if (smallY > height - 10) { // Hits ground
+                smallVY *= -restitution;
+                smallY = height - 10;
+                if (abs(smallVY) < 0.5) smallVY = 0; // Stop bouncing when very slow
+            }
+
+            // Draw Large Ball
+            fill(0, 100, 255);
+            ellipse(bigX, bigY, 50, 50);
+
+            // Draw Small Ball
+            fill(255, 0, 0);
+            ellipse(smallX, smallY, 20, 20);
+
+            // Draw Slingshot Line (while dragging)
+            if (dragging) {
+                stroke(0);
+                line(launchX, launchY, mouseX, mouseY);
+            }
+        }
+
+        // Start Dragging for Slingshot
+        function mousePressed() {
+            if (dist(mouseX, mouseY, smallX, smallY) < 10) {
+                dragging = true;
+                launchX = mouseX;
+                launchY = mouseY;
+            }
+        }
+
+        // Release to Fire the Small Ball
+        function mouseReleased() {
+            if (dragging) {
+                smallVX = (launchX - mouseX) * 0.2; // Launch force
+                smallVY = (launchY - mouseY) * 0.2;
+                dragging = false;
+            }
+        }
+    </script>
+    <div class="button-group">
+                    
+        <button onclick="goHome()">Back to Home</button>
+        <button onclick="goToNextSimulation()">Next Simulation →</button>
+      </div>   
+</body>
+
+</html>

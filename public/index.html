@@ -39,6 +39,18 @@
             text-decoration: none;
             margin-top: 20px;
         }
+        .hero .early-access {
+            background: #ff6f61;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
         .section {
             margin: 50px 0;
             padding: 20px;
@@ -148,6 +160,11 @@
             image.classList.toggle('zoomed');
         }
 
+        // Redirect to early access page
+        function redirectToEarlyAccess() {
+            window.location.href = "early-access.html";
+        }
+
         // Attach click event to the image
         document.addEventListener('DOMContentLoaded', () => {
             const image = document.querySelector('.diagram img');
@@ -166,6 +183,8 @@
             <p>Have you started learning something but feel lost on what’s next?</p>
             <p><b>If any of this sounds familiar, GEA is here to help!</b></p>
             <a href="#signup" class="cta">Join the Waitlist</a>
+            <button class="early-access" onclick="redirectToEarlyAccess()">Try Early Access</button>
+            <p style="font-size: 0.9em; margin-top: 10px;">Here is an early version of GEA. Give it a try!</p>
         </div>
         
         <div class="section">

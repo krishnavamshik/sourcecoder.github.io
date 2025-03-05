@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEA Early Access - Learn Newton's Third Law</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f7f7f7, #e3e3e3);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1,
+        h2 {
+            color: #4A90E2;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .law-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .simulation-placeholder {
+            background: #f9f9f9;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+            border-radius: 5px;
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .simulation-placeholder p {
+            font-size: 0.9em;
+            color: #999;
+            margin: 0;
+        }
+
+        /* Instructions Styling */
+        .instructions {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .instructions p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        /* Input and Button Styling */
+        .simulation-controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .simulation-controls input {
+            width: 100px;
+            margin-right: 10px;
+        }
+
+        .simulation-controls button {
+            padding: 0px 10px;
+            font-size: 0.9em;
+            cursor: pointer;
+            width: 120px;
+        }
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            margin: 0 290px;
+            padding: 10px 30px;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Learn Newton's Third Law of Motion</h1>
+        <p>Welcome to GEA's Early Access! Here, you’ll explore <strong>Newton's Third Law of Motion</strong>—the principle that for every action, there is an equal and opposite reaction. Let’s dive in and learn through interactive simulations!</p>
+
+        <!-- Third Law Section -->
+        <div class="law-section">
+            <h2>Third Law: The Law of Action and Reaction</h2>
+            <p><strong>"For every action, there is an equal and opposite reaction."</strong></p>
+            <p><strong>What does this mean?</strong> When you push against a wall, the wall pushes back with an equal force. Similarly, when a rocket expels gas downward, the gas pushes the rocket upward with an equal force.</p>
+            <p><strong>Key Idea:</strong> Forces always come in pairs—equal in magnitude and opposite in direction.</p>
+
+            <!-- Simulation Placeholder -->
+            <div id="third-law-simulation" class="simulation-placeholder">
+                <p>Loading simulation...</p>
+            </div>
+
+            <!-- Instructions -->
+            <div class="instructions">
+                <p><strong>Rocket Launch Simulation</strong></p>
+                <p>Adjust the mass and force to see how the rocket accelerates.</p>
+                <p>Click "Launch" to see the rocket take off!</p>
+                <p>Use "Reset" to start over.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function goToNextSimulation() {
+            window.location.href = 'completed.html';
+        }
+        function goHome() {
+            window.location.href = 'newtons_secondlaw.html';
+        }
+    </script>
+    <!-- p5.js Simulation for Third Law -->
+    <script>
+        let rocketY;
+        let velocity = 0;
+        let acceleration = 0;
+        let launched = false;
+        let particles = [];
+
+        let massInput, forceInput, accelerationInput, launchButton;
+
+        function setup() {
+            const canvas = createCanvas(400, 500);
+            canvas.parent('third-law-simulation'); // Attach to the simulation div
+
+            rocketY = height - 50;  // Rocket starts on ground
+
+            // Create a container for simulation controls
+            const controlsDiv = createDiv();
+            controlsDiv.parent('third-law-simulation');
+            controlsDiv.class('simulation-controls');
+
+            // Input for Mass
+            massInput = createInput("100");
+            massInput.parent(controlsDiv);
+            massInput.size(50);
+            createElement("label", " Mass (kg)").parent(controlsDiv);
+
+            // Input for Force
+            forceInput = createInput("0");
+            forceInput.parent(controlsDiv);
+            forceInput.size(50);
+            createElement("label", " Force (N)").parent(controlsDiv);
+
+            // Acceleration Display
+            accelerationInput = createInput("0");
+            accelerationInput.parent(controlsDiv);
+            accelerationInput.size(50);
+            accelerationInput.attribute("readonly", true);
+            createElement("label", " Acceleration (m/s²)").parent(controlsDiv);
+
+            // Launch Button
+            launchButton = createButton("Launch 🚀");
+            launchButton.parent(controlsDiv);
+            launchButton.mousePressed(launchRocket);
+        }
+
+        function draw() {
+            background(220);
+
+            drawRocket(200, rocketY);
+            drawParticles();
+
+            // If launched, update motion
+            if (launched) {
+                velocity += acceleration;  // Velocity changes due to acceleration
+                rocketY -= velocity;  // Move up (negative y-direction)
+
+                // Create new exhaust particles
+                if (frameCount % 3 === 0) {
+                    particles.push(new Particle(200, rocketY + 60));
+                }
+
+                if (rocketY < -60) {  // Reset when out of screen
+                    launched = false;
+                    rocketY = height - 50;
+                    velocity = 0;
+                    particles = [];
+                }
+            }
+        }
+
+        // Function to Draw Rocket
+        function drawRocket(x, y) {
+            fill(255, 0, 0);
+
+            // Rocket Body
+            rect(x - 20, y, 40, 60);
+
+            // Nose Cone
+            fill(200, 50, 50);
+            triangle(x - 20, y, x + 20, y, x, y - 20);
+
+            // Side Boosters
+            fill(180, 0, 0);
+            rect(x - 30, y + 20, 10, 30);
+            rect(x + 20, y + 20, 10, 30);
+
+            // Flames when launched
+            if (launched) {
+                fill(255, 165, 0);
+                triangle(x - 10, y + 60, x + 10, y + 60, x, y + 80);
+            }
+        }
+
+        // Function to Draw Particles (Exhaust)
+        function drawParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].show();
+                if (particles[i].finished()) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+
+        // Particle Class (Exhaust Effect)
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vy = random(2, 5);
+                this.alpha = 255;
+            }
+
+            update() {
+                this.y += this.vy; // Move downward (action)
+                this.alpha -= 5; // Fade out
+            }
+
+            finished() {
+                return this.alpha < 0;
+            }
+
+            show() {
+                noStroke();
+                fill(255, 150, 0, this.alpha);
+                ellipse(this.x, this.y, 8, 8);
+            }
+        }
+
+        // Function to Launch Rocket
+        function launchRocket() {
+            let mass = float(massInput.value());
+            let force = float(forceInput.value());
+
+            if (mass > 0) {
+                acceleration = force / mass;  // F = ma → a = F/m
+                accelerationInput.value(acceleration.toFixed(2)); // Display acceleration
+                launched = true;
+            }
+        }
+    </script>
+        <div class="button-group">
+                    
+            <button onclick="goHome()">Previous</button>
+            <button onclick="goToNextSimulation()">Completed!!</button>
+          </div>   
+</body>
+
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEA Early Access - Learn Newton's Laws</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f7f7f7, #e3e3e3);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1,
+        h2 {
+            color: #4A90E2;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .law-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .simulation-placeholder {
+            background: #f9f9f9;
+            border: 1px dashed #ccc;
+            /* Smaller border thickness */
+            padding: 10px;
+            /* Reduced padding */
+            text-align: center;
+            margin-top: 20px;
+            border-radius: 5px;
+            /* Smaller border radius */
+            height: 450px;
+            /* Adjusted height */
+            position: relative;
+            /* Required for positioning inputs */
+            overflow: hidden;
+            /* Prevent overflow */
+        }
+
+        .simulation-placeholder p {
+            font-size: 0.9em;
+            /* Smaller font size */
+            color: #999;
+            /* Lighter text color */
+            margin: 0;
+            /* Remove default margin */
+        }
+
+        /* Instructions Styling */
+        .instructions {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .instructions p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        /* Input and Button Styling */
+        .simulation-controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            /* Use flexbox */
+            flex-direction: column;
+            /* Stack items vertically */
+            gap: 10px;
+            /* Add spacing between items */
+        }
+
+        .simulation-controls input {
+            width: 100px;
+            /* Adjust width for better alignment */
+            margin-right: 10px;
+        }
+
+        .simulation-controls button {
+            padding: 0px 10px;
+            font-size: 0.9em;
+            cursor: pointer;
+            width: 120px;
+            /* Adjust button width for consistency */
+        }
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            margin: 0 290px;
+            padding: 10px 30px;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Learn Newton's Laws of Motion</h1>
+        <p>Welcome to GEA's Early Access! Here, you’ll explore <strong>Newton's Laws of Motion</strong>—the foundation
+            of physics. These laws explain how objects move and interact with forces. Let’s dive in and learn through
+            interactive simulations!</p>
+
+        <!-- Second Law Section -->
+        <div class="law-section">
+            <h2>Second Law: The Law of Acceleration</h2>
+            <p><strong>"The acceleration of an object depends on the force applied and the mass of the object."</strong>
+            </p>
+            <p><strong>What does this mean?</strong> If you push a shopping cart lightly, it moves slowly. If you push
+                it harder, it moves faster. But if the cart is full (more mass), the same push will make it move slower.
+            </p>
+            <p><strong>Formula:</strong> Force = Mass × Acceleration (F = ma)</p>
+            <p><strong>Key Idea:</strong> The more force you apply, the faster an object accelerates, but heavier
+                objects need more force to move.</p>
+
+            <!-- Simulation Placeholder -->
+            <div id="second-law-simulation" class="simulation-placeholder">
+                <p>Loading simulation...</p>
+            </div>
+
+            <!-- Instructions -->
+            <div class="instructions">
+                <p><strong>Car Acceleration Simulation</strong></p>
+                <p>Adjust the mass and force to see how the car accelerates.</p>
+                <p>Click "Apply Force" to see the car move!</p>
+                <p>Use "Reset" to start over.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function goToNextSimulation() {
+            window.location.href = 'newtons_thirdlaw.html';
+        }
+        function goHome() {
+            window.location.href = 'early-access.html';
+        }
+    </script>
+
+    <!-- p5.js Simulation for Second Law -->
+    <script>
+        let carX = 50;
+        let velocity = 0;
+        let acceleration = 0;
+        let massInput, forceInput, accelerationDisplay;
+        let applyForceButton, resetButton;
+        let force = 0;
+        let friction = 0.01; // Simulated air resistance
+
+        function setup() {
+            const canvas = createCanvas(600, 300);
+            canvas.parent('second-law-simulation'); // Attach to the simulation div
+
+            // Create a container for simulation controls
+            const controlsDiv = createDiv();
+            controlsDiv.parent('second-law-simulation');
+            controlsDiv.class('simulation-controls');
+
+            // Input for Mass
+            massInput = createInput("100");
+            massInput.parent(controlsDiv);
+            massInput.size(50);
+            createElement("label", " Mass (kg)").parent(controlsDiv);
+
+            // Input for Force
+            forceInput = createInput("0");
+            forceInput.parent(controlsDiv);
+            forceInput.size(50);
+            createElement("label", " Force (N)").parent(controlsDiv);
+
+            // Acceleration Display
+            accelerationDisplay = createInput("0");
+            accelerationDisplay.parent(controlsDiv);
+            accelerationDisplay.size(50);
+            accelerationDisplay.attribute("readonly", true);
+
+            createElement("label", " Acceleration (m/s²)").parent(controlsDiv);
+
+            // Apply Force Button
+            applyForceButton = createButton("Apply Force 🚀");
+            applyForceButton.parent(controlsDiv);
+            applyForceButton.mousePressed(applyForce);
+
+            // Reset Button
+            resetButton = createButton("Reset 🔄");
+            resetButton.parent(controlsDiv);
+            resetButton.mousePressed(resetCar);
+        }
+
+        function draw() {
+            background(220);
+
+            // Draw Road
+            stroke(0);
+            line(0, height - 50, width, height - 50);
+
+            // Apply motion updates
+            velocity += acceleration;
+            velocity *= (1 - friction); // Apply friction
+            carX += velocity;
+
+            // Draw Car
+            drawCar(carX, height - 70);
+
+            // Stop car at the right boundary
+            if (carX > width - 80) {
+                carX = width - 80;
+                velocity = 0;
+            }
+        }
+
+        // Function to draw the car
+        function drawCar(x, y) {
+            fill(255, 0, 0);
+            rect(x, y, 60, 30); // Car body
+
+            fill(0);
+            ellipse(x + 10, y + 30, 15, 15); // Left Wheel
+            ellipse(x + 50, y + 30, 15, 15); // Right Wheel
+        }
+
+        // Function to apply force
+        function applyForce() {
+            let mass = float(massInput.value());
+            force = float(forceInput.value());
+
+            if (mass > 0) {
+                acceleration = force / mass; // F = ma
+                accelerationDisplay.value(acceleration.toFixed(2)); // Update UI
+            }
+        }
+
+        // Function to reset the simulation
+        function resetCar() {
+            carX = 50;
+            velocity = 0;
+            acceleration = 0;
+            forceInput.value("0");
+            accelerationDisplay.value("0");
+        }
+    </script>
+        <div class="button-group">
+                    
+            <button onclick="goHome()">Back to Home</button>
+            <button onclick="goToNextSimulation()">Next Simulation →</button>
+          </div>   
+</body>
+
+</html>
