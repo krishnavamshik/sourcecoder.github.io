@@ -54,86 +54,72 @@
             margin-bottom: 30px;
         }
 
+        .simulation-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
         .simulation-placeholder {
             background: #f9f9f9;
             border: 1px dashed #ccc;
-            /* Smaller border thickness */
             padding: 10px;
-            /* Reduced padding */
             text-align: center;
-            margin-top: 20px;
             border-radius: 5px;
-            /* Smaller border radius */
             height: 450px;
-            /* Adjusted height */
+            width: 70%;
             position: relative;
-            /* Required for positioning inputs */
             overflow: hidden;
-            /* Prevent overflow */
         }
 
-        .simulation-placeholder p {
-            font-size: 0.9em;
-            /* Smaller font size */
-            color: #999;
-            /* Lighter text color */
-            margin: 0;
-            /* Remove default margin */
-        }
-
-        /* Instructions Styling */
-        .instructions {
+        .simulation-instructions {
+            width: 30%;
             background: #fff;
             padding: 15px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            text-align: left;
         }
 
-        .instructions p {
-            margin: 5px 0;
-            font-size: 0.9em;
-            color: #555;
-        }
-
-        /* Input and Button Styling */
         .simulation-controls {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
             display: flex;
-            /* Use flexbox */
             flex-direction: column;
-            /* Stack items vertically */
-            gap: 10px;
-            /* Add spacing between items */
+            align-items: flex-start; /* Left-align items */
+            gap: 10px; /* Add spacing between items */
+        }
+
+        .simulation-controls label {
+            font-weight: bold;
+            margin-bottom: 5px; /* Add spacing below labels */
         }
 
         .simulation-controls input {
             width: 100px;
-            /* Adjust width for better alignment */
-            margin-right: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
         .simulation-controls button {
-            padding: 0px 10px;
+            padding: 5px 10px;
             font-size: 0.9em;
             cursor: pointer;
-            width: 120px;
-            /* Adjust button width for consistency */
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px; /* Add spacing above buttons */
         }
+
         .button-group {
             margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 600px;
         }
 
         .button-group button {
-            margin: 0 290px;
-            padding: 10px 30px;
+            padding: 10px 20px;
             background: #4A90E2;
             color: white;
             border: none;
@@ -163,20 +149,45 @@
             <p><strong>Key Idea:</strong> The more force you apply, the faster an object accelerates, but heavier
                 objects need more force to move.</p>
 
-            <!-- Simulation Placeholder -->
-            <div id="second-law-simulation" class="simulation-placeholder">
-                <p>Loading simulation...</p>
-            </div>
+            <!-- Simulation Container -->
+            <div class="simulation-container">
+                <!-- Simulation Placeholder -->
+                <div id="second-law-simulation" class="simulation-placeholder">
 
-            <!-- Instructions -->
-            <div class="instructions">
-                <p><strong>Car Acceleration Simulation</strong></p>
-                <p>Adjust the mass and force to see how the car accelerates.</p>
-                <p>Click "Apply Force" to see the car move!</p>
-                <p>Use "Reset" to start over.</p>
+                </div>
+
+                <!-- Instructions -->
+                <div class="simulation-instructions">
+                    <p><strong>Car Acceleration Simulation</strong></p>
+                    <p>Adjust the mass and force to see how the car accelerates.</p>
+                    <p>Click "Apply Force" to see the car move!</p>
+                    <p>Use "Reset" to start over.</p>
+
+                    <!-- Input Fields -->
+                    <div class="simulation-controls">
+                        <label for="massInput">Mass (kg)</label>
+                        <input type="number" id="massInput" value="100">
+
+                        <label for="forceInput">Force (N)</label>
+                        <input type="number" id="forceInput" value="0">
+
+                        <label for="accelerationDisplay">Acceleration (m/s²)</label>
+                        <input type="text" id="accelerationDisplay" readonly>
+
+                        <button id="applyForceButton">Apply Force 🚀</button>
+                        <button id="resetButton">Reset 🔄</button>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Centered Buttons -->
+        <div class="button-group">
+            <button onclick="goHome()">Back to Home</button>
+            <button onclick="goToNextSimulation()">Next Simulation →</button>
+        </div>
     </div>
+
     <script>
         function goToNextSimulation() {
             window.location.href = 'newtons_thirdlaw.html';
@@ -200,40 +211,15 @@
             const canvas = createCanvas(600, 300);
             canvas.parent('second-law-simulation'); // Attach to the simulation div
 
-            // Create a container for simulation controls
-            const controlsDiv = createDiv();
-            controlsDiv.parent('second-law-simulation');
-            controlsDiv.class('simulation-controls');
-
             // Input for Mass
-            massInput = createInput("100");
-            massInput.parent(controlsDiv);
-            massInput.size(50);
-            createElement("label", " Mass (kg)").parent(controlsDiv);
+            massInput = document.getElementById('massInput');
+            forceInput = document.getElementById('forceInput');
+            accelerationDisplay = document.getElementById('accelerationDisplay');
+            applyForceButton = document.getElementById('applyForceButton');
+            resetButton = document.getElementById('resetButton');
 
-            // Input for Force
-            forceInput = createInput("0");
-            forceInput.parent(controlsDiv);
-            forceInput.size(50);
-            createElement("label", " Force (N)").parent(controlsDiv);
-
-            // Acceleration Display
-            accelerationDisplay = createInput("0");
-            accelerationDisplay.parent(controlsDiv);
-            accelerationDisplay.size(50);
-            accelerationDisplay.attribute("readonly", true);
-
-            createElement("label", " Acceleration (m/s²)").parent(controlsDiv);
-
-            // Apply Force Button
-            applyForceButton = createButton("Apply Force 🚀");
-            applyForceButton.parent(controlsDiv);
-            applyForceButton.mousePressed(applyForce);
-
-            // Reset Button
-            resetButton = createButton("Reset 🔄");
-            resetButton.parent(controlsDiv);
-            resetButton.mousePressed(resetCar);
+            applyForceButton.addEventListener('click', applyForce);
+            resetButton.addEventListener('click', resetCar);
         }
 
         function draw() {
@@ -249,33 +235,54 @@
             carX += velocity;
 
             // Draw Car
-            drawCar(carX, height - 70);
+            drawCar(carX, height - 90); // Adjusted y-position for better alignment
 
             // Stop car at the right boundary
-            if (carX > width - 80) {
-                carX = width - 80;
+            if (carX > width - 100) {
+                carX = width - 100;
                 velocity = 0;
             }
         }
 
         // Function to draw the car
         function drawCar(x, y) {
-            fill(255, 0, 0);
-            rect(x, y, 60, 30); // Car body
+            // Car Body
+            fill(255, 0, 0); // Red color for the car body
+            rect(x, y, 80, 40, 5); // Car body with rounded corners
 
-            fill(0);
-            ellipse(x + 10, y + 30, 15, 15); // Left Wheel
-            ellipse(x + 50, y + 30, 15, 15); // Right Wheel
+            // Windows
+            fill(173, 216, 230); // Light blue for windows
+            rect(x + 10, y + 5, 25, 20, 3); // Left window
+            rect(x + 45, y + 5, 25, 20, 3); // Right window
+
+            // Windshield
+            fill(200, 200, 255); // Light blue for windshield
+            rect(x + 35, y + 5, 10, 20, 2); // Windshield
+
+            // Wheels
+            fill(0); // Black for wheels
+            ellipse(x + 15, y + 40, 20, 20); // Left wheel
+            ellipse(x + 65, y + 40, 20, 20); // Right wheel
+
+            // Wheel Rims
+            fill(192, 192, 192); // Silver for rims
+            ellipse(x + 15, y + 40, 12, 12); // Left rim
+            ellipse(x + 65, y + 40, 12, 12); // Right rim
+
+            // Headlights
+            fill(255, 255, 0); // Yellow for headlights
+            ellipse(x + 5, y + 15, 10, 10); // Left headlight
+            ellipse(x + 75, y + 15, 10, 10); // Right headlight
         }
 
         // Function to apply force
         function applyForce() {
-            let mass = float(massInput.value());
-            force = float(forceInput.value());
+            let mass = parseFloat(massInput.value);
+            force = parseFloat(forceInput.value);
 
             if (mass > 0) {
                 acceleration = force / mass; // F = ma
-                accelerationDisplay.value(acceleration.toFixed(2)); // Update UI
+                accelerationDisplay.value = acceleration.toFixed(2); // Update UI
             }
         }
 
@@ -284,15 +291,9 @@
             carX = 50;
             velocity = 0;
             acceleration = 0;
-            forceInput.value("0");
-            accelerationDisplay.value("0");
+            accelerationDisplay.value = "0";
         }
     </script>
-        <div class="button-group">
-                    
-            <button onclick="goHome()">Back to Home</button>
-            <button onclick="goToNextSimulation()">Next Simulation →</button>
-          </div>   
 </body>
 
 </html>

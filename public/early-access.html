@@ -54,31 +54,52 @@
             margin-bottom: 30px;
         }
 
+        .simulation-container {
+            display: flex;
+            gap: 20px; /* Space between simulation and instructions */
+        }
+
         .simulation-placeholder {
             background: #f9f9f9;
             border: 1px dashed #ccc;
-            /* Smaller border thickness */
             padding: 10px;
-            /* Reduced padding */
             text-align: center;
-            margin-top: 20px;
             border-radius: 5px;
-            /* Smaller border radius */
             height: 450px;
-            /* Adjusted height */
+            width: 70%; /* Simulation takes 70% of the width */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* Prevent overflow */
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 30%; /* Instructions take 30% of the width */
+            height: 450px; /* Match height with simulation */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .instructions p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #555;
         }
 
         .button-group {
             margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 600px;
         }
 
         .button-group button {
-            margin: 0 290px;
             padding: 10px 30px;
             background: #4A90E2;
             color: white;
@@ -110,7 +131,20 @@
             <p><strong>Key Idea:</strong> Objects resist changes to their state of motion. This resistance is called
                 <strong>inertia</strong>.
             </p>
-            <div id="first-law-simulation" class="simulation-placeholder">           
+
+            <!-- Simulation and Instructions Container -->
+            <div class="simulation-container">
+                <!-- Simulation Placeholder -->
+                <div id="first-law-simulation" class="simulation-placeholder">
+                </div>
+
+                <!-- Instructions -->
+                <div class="instructions">
+                    <p><strong>Slingshot Simulation</strong></p>
+                    <p>Click on red ball, Drag & release the small ball to launch it.</p>
+                    <p>Watch it collide and move the big ball!</p>
+                    <p>Both balls will bounce off the walls and ground.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -140,14 +174,6 @@
 
         function draw() {
             background(220);
-
-            // Display Instructions
-            fill(0);
-            textSize(14);
-            text("Slingshot Simulation", 20, 20);
-            text("Drag & release the small ball to launch it.", 20, 40);
-            text("Watch it collide and move the big ball!", 20, 60);
-            text("Both balls will bounce off the walls and ground.", 20, 80);
 
             // Apply gravity to both balls
             bigVY += gravity;
@@ -203,19 +229,36 @@
                 if (abs(smallVY) < 0.5) smallVY = 0; // Stop bouncing when very slow
             }
 
-            // Draw Large Ball
-            fill(0, 100, 255);
-            ellipse(bigX, bigY, 50, 50);
+            // Draw Large Ball with Gradient and Shadow
+            drawBall(bigX, bigY, 50, color(0, 100, 255), color(0, 50, 200));
 
-            // Draw Small Ball
-            fill(255, 0, 0);
-            ellipse(smallX, smallY, 20, 20);
+            // Draw Small Ball with Gradient and Shadow
+            drawBall(smallX, smallY, 20, color(255, 0, 0), color(200, 0, 0));
 
             // Draw Slingshot Line (while dragging)
             if (dragging) {
                 stroke(0);
                 line(launchX, launchY, mouseX, mouseY);
             }
+        }
+
+        // Function to draw a ball with gradient and shadow
+        function drawBall(x, y, size, color1, color2) {
+            // Shadow
+            drawingContext.shadowBlur = 10;
+            drawingContext.shadowColor = color(0, 0, 0, 100);
+
+            // Gradient Fill
+            let gradient = drawingContext.createRadialGradient(
+                x, y, size * 0.2, x, y, size
+            );
+            gradient.addColorStop(0, color1.toString());
+            gradient.addColorStop(1, color2.toString());
+            drawingContext.fillStyle = gradient;
+
+            // Draw Ball
+            noStroke();
+            ellipse(x, y, size, size);
         }
 
         // Start Dragging for Slingshot
@@ -237,10 +280,9 @@
         }
     </script>
     <div class="button-group">
-                    
         <button onclick="goHome()">Back to Home</button>
         <button onclick="goToNextSimulation()">Next Simulation →</button>
-      </div>   
+    </div>
 </body>
 
 </html>

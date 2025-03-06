@@ -54,86 +54,239 @@
             margin-bottom: 30px;
         }
 
+        .simulation-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
         .simulation-placeholder {
             background: #f9f9f9;
             border: 1px dashed #ccc;
             padding: 10px;
             text-align: center;
-            margin-top: 20px;
             border-radius: 5px;
-            height: 500px;
+            height: 450px;
+            width: 70%;
             position: relative;
             overflow: hidden;
         }
 
-        .simulation-placeholder p {
-            font-size: 0.9em;
-            color: #999;
-            margin: 0;
-        }
-
-        /* Instructions Styling */
-        .instructions {
+        .simulation-instructions {
+            width: 30%;
             background: #fff;
             padding: 15px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            text-align: left;
         }
 
-        .instructions p {
-            margin: 5px 0;
-            font-size: 0.9em;
-            color: #555;
-        }
-
-        /* Input and Button Styling */
         .simulation-controls {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
             gap: 10px;
+        }
+
+        .simulation-controls label {
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
         .simulation-controls input {
             width: 100px;
-            margin-right: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
         .simulation-controls button {
-            padding: 0px 10px;
+            padding: 8px 15px;
             font-size: 0.9em;
             cursor: pointer;
-            width: 120px;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
         }
+
+        .simulation-controls button:hover {
+            background: #3A80D2;
+            transform: scale(1.05);
+        }
+
+        .simulation-controls .launch-button {
+            background: #FF5722;
+            font-weight: bold;
+        }
+
+        .simulation-controls .launch-button:hover {
+            background: #E64A19;
+        }
+
         .button-group {
             margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 600px;
         }
 
         .button-group button {
-            margin: 0 290px;
-            padding: 10px 30px;
+            padding: 10px 20px;
             background: #4A90E2;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .button-group button:hover {
+            background: #3A80D2;
+            transform: scale(1.05);
+        }
+
+        /* New styles for enhanced features */
+        .force-visualizer {
+            height: 30px;
+            width: 100%;
+            background: #eee;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .force-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #4CAF50, #FFEB3B, #FF5722);
+            transition: width 0.3s ease;
+        }
+
+        .force-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: #333;
+        }
+
+        .fuel-gauge {
+            height: 15px;
+            width: 100%;
+            background: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .fuel-level {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(to right, #FF5722, #FFEB3B, #4CAF50);
+            transition: width 0.5s ease;
+        }
+
+        .mission-status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            background: #E0E0E0;
+        }
+
+        .telemetry {
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        .telemetry-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .telemetry-value {
+            font-weight: bold;
+        }
+
+        /* Badges and achievements */
+        .badges {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #E0E0E0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+            cursor: help;
+        }
+
+        .badge.earned {
+            opacity: 1;
+            background: #4CAF50;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Tooltip for badges */
+        .badge-tooltip {
+            position: relative;
+        }
+
+        .badge-tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+        }
+
+        .badge-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Learn Newton's Third Law of Motion</h1>
-        <p>Welcome to GEA's Early Access! Here, you’ll explore <strong>Newton's Third Law of Motion</strong>—the principle that for every action, there is an equal and opposite reaction. Let’s dive in and learn through interactive simulations!</p>
+        <h1>Learn Newton's Laws of Motion</h1>
+        <p>Welcome to GEA's Early Access! Here, you'll explore <strong>Newton's Laws of Motion</strong>—the foundation
+            of physics. These laws explain how objects move and interact with forces. Let's dive in and learn through
+            interactive simulations!</p>
 
         <!-- Third Law Section -->
         <div class="law-section">
@@ -142,123 +295,352 @@
             <p><strong>What does this mean?</strong> When you push against a wall, the wall pushes back with an equal force. Similarly, when a rocket expels gas downward, the gas pushes the rocket upward with an equal force.</p>
             <p><strong>Key Idea:</strong> Forces always come in pairs—equal in magnitude and opposite in direction.</p>
 
-            <!-- Simulation Placeholder -->
-            <div id="third-law-simulation" class="simulation-placeholder">
-                <p>Loading simulation...</p>
-            </div>
+            <!-- Simulation Container -->
+            <div class="simulation-container">
+                <!-- Simulation Placeholder -->
+                <div id="third-law-simulation" class="simulation-placeholder">
 
-            <!-- Instructions -->
-            <div class="instructions">
-                <p><strong>Rocket Launch Simulation</strong></p>
-                <p>Adjust the mass and force to see how the rocket accelerates.</p>
-                <p>Click "Launch" to see the rocket take off!</p>
-                <p>Use "Reset" to start over.</p>
+                </div>
+
+                <!-- Instructions -->
+                <div class="simulation-instructions">
+                    <p><strong>🚀 Space Mission Simulator</strong></p>
+                    <p>Adjust the rocket mass and thrust to complete your mission!</p>
+                    <p>Watch how Newton's Third Law propels your rocket upward.</p>
+
+                    <div class="mission-status">MISSION: READY FOR LAUNCH</div>
+
+                    <!-- Input Fields -->
+                    <div class="simulation-controls">
+                        <label for="massInput">Rocket Mass (kg)</label>
+                        <input type="range" id="massInput" min="50" max="500" value="200" step="10">
+                        <span id="massValue">200 kg</span>
+
+                        <label for="forceInput">Rocket Thrust (N)</label>
+                        <input type="range" id="forceInput" min="0" max="10000" value="2000" step="100">
+                        <span id="forceValue">2000 N</span>
+
+                        <div class="force-visualizer">
+                            <div class="force-bar" id="forceBar"></div>
+                            <div class="force-label" id="forceLabel">0%</div>
+                        </div>
+
+                        <label>Fuel Level</label>
+                        <div class="fuel-gauge">
+                            <div class="fuel-level" id="fuelLevel"></div>
+                        </div>
+
+                        <button id="launchButton" class="launch-button">LAUNCH MISSION 🚀</button>
+                        <button id="resetButton">ABORT & RESET 🔄</button>
+                    </div>
+
+                    <!-- Telemetry Data -->
+                    <div class="telemetry">
+                        <div class="telemetry-item">
+                            <span>Acceleration:</span>
+                            <span class="telemetry-value" id="accelerationDisplay">0 m/s²</span>
+                        </div>
+                        <div class="telemetry-item">
+                            <span>Altitude:</span>
+                            <span class="telemetry-value" id="altitudeDisplay">0 m</span>
+                        </div>
+                        <div class="telemetry-item">
+                            <span>Speed:</span>
+                            <span class="telemetry-value" id="velocityDisplay">0 m/s</span>
+                        </div>
+                    </div>
+
+                    <!-- Achievement Badges -->
+                    <div class="badges">
+                        <div class="badge badge-tooltip" id="badge1" title="First Launch">
+                            🚀
+                            <span class="tooltip-text">First Launch</span>
+                        </div>
+                        <div class="badge badge-tooltip" id="badge2" title="Escape Velocity">
+                            🌍
+                            <span class="tooltip-text">Escape Velocity</span>
+                        </div>
+                        <div class="badge badge-tooltip" id="badge3" title="Space Explorer">
+                            🌠
+                            <span class="tooltip-text">Space Explorer</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Centered Buttons -->
+        <div class="button-group">
+            <button onclick="goToPrevious()">Back to Previous</button>
+            <button onclick="goToNextSimulation()">Completed!!</button>
+        </div>
     </div>
+
     <script>
         function goToNextSimulation() {
             window.location.href = 'completed.html';
         }
-        function goHome() {
+        function goToPrevious() {
             window.location.href = 'newtons_secondlaw.html';
         }
     </script>
+
     <!-- p5.js Simulation for Third Law -->
     <script>
         let rocketY;
         let velocity = 0;
         let acceleration = 0;
         let launched = false;
+        let fuel = 100; // Fuel percentage
         let particles = [];
-
-        let massInput, forceInput, accelerationInput, launchButton;
+        let stars = [];
+        let clouds = [];
+        let altitude = 0; // meters
+        let maxAltitude = 0;
+        let massInput, forceInput, launchButton, resetButton;
+        let massValue, forceValue, accelerationDisplay, altitudeDisplay, velocityDisplay;
+        let missionStatus, forceBar, forceLabel, fuelLevel;
+        let badge1, badge2, badge3;
+        let rocketColor = "#FF5722";
+        let rocketFlame = 0;
+        let backgroundGradient = 0; // 0 to 1 for earth to space transition
+        let earthRadius = 150;
+        let soundEffects = false; // Flag for future sound implementation
+        let achievements = {
+            firstLaunch: false,
+            escapeVelocity: false,
+            spaceExplorer: false
+        };
+        // Random color options for rocket customization
+        let colorOptions = ["#FF5722", "#2196F3", "#4CAF50", "#9C27B0", "#FFEB3B"];
 
         function setup() {
-            const canvas = createCanvas(400, 500);
+            const canvas = createCanvas(600, 450);
             canvas.parent('third-law-simulation'); // Attach to the simulation div
 
-            rocketY = height - 50;  // Rocket starts on ground
+            rocketY = height - 100;  // Rocket starts on ground
 
-            // Create a container for simulation controls
-            const controlsDiv = createDiv();
-            controlsDiv.parent('third-law-simulation');
-            controlsDiv.class('simulation-controls');
+            // Get HTML elements
+            massInput = document.getElementById('massInput');
+            forceInput = document.getElementById('forceInput');
+            massValue = document.getElementById('massValue');
+            forceValue = document.getElementById('forceValue');
+            accelerationDisplay = document.getElementById('accelerationDisplay');
+            altitudeDisplay = document.getElementById('altitudeDisplay');
+            velocityDisplay = document.getElementById('velocityDisplay');
+            launchButton = document.getElementById('launchButton');
+            resetButton = document.getElementById('resetButton');
+            missionStatus = document.querySelector('.mission-status');
+            forceBar = document.getElementById('forceBar');
+            forceLabel = document.getElementById('forceLabel');
+            fuelLevel = document.getElementById('fuelLevel');
+            badge1 = document.getElementById('badge1');
+            badge2 = document.getElementById('badge2');
+            badge3 = document.getElementById('badge3');
 
-            // Input for Mass
-            massInput = createInput("100");
-            massInput.parent(controlsDiv);
-            massInput.size(50);
-            createElement("label", " Mass (kg)").parent(controlsDiv);
+            // Set up event listeners
+            massInput.addEventListener('input', updateMassValue);
+            forceInput.addEventListener('input', updateForceValue);
+            launchButton.addEventListener('click', launchRocket);
+            resetButton.addEventListener('click', resetRocket);
 
-            // Input for Force
-            forceInput = createInput("0");
-            forceInput.parent(controlsDiv);
-            forceInput.size(50);
-            createElement("label", " Force (N)").parent(controlsDiv);
+            // Initialize stars
+            for (let i = 0; i < 100; i++) {
+                stars.push({
+                    x: random(width),
+                    y: random(height/2),
+                    size: random(1, 3),
+                    twinkle: random(0.5, 1.5)
+                });
+            }
 
-            // Acceleration Display
-            accelerationInput = createInput("0");
-            accelerationInput.parent(controlsDiv);
-            accelerationInput.size(50);
-            accelerationInput.attribute("readonly", true);
-            createElement("label", " Acceleration (m/s²)").parent(controlsDiv);
+            // Initialize clouds
+            for (let i = 0; i < 5; i++) {
+                clouds.push({
+                    x: random(width),
+                    y: random(height/2, height-100),
+                    size: random(40, 80),
+                    speed: random(0.2, 0.5)
+                });
+            }
 
-            // Launch Button
-            launchButton = createButton("Launch 🚀");
-            launchButton.parent(controlsDiv);
-            launchButton.mousePressed(launchRocket);
+            // Initial UI updates
+            updateMassValue();
+            updateForceValue();
         }
 
         function draw() {
-            background(220);
+            // Background gradient from Earth to space
+            setGradientBackground();
+            
+            // Draw stars if in space
+            if (backgroundGradient > 0.3) {
+                drawStars();
+            }
+            
+            // Draw clouds if near Earth
+            if (backgroundGradient < 0.7) {
+                drawClouds();
+            }
+            
+            // Draw Earth curve
+            drawEarth();
 
-            drawRocket(200, rocketY);
-            drawParticles();
-
-            // If launched, update motion
+            // Draw force vectors if launched
             if (launched) {
-                velocity += acceleration;  // Velocity changes due to acceleration
-                rocketY -= velocity;  // Move up (negative y-direction)
+                drawForceVectors();
+            }
+            
+            // Draw particles (exhaust)
+            drawParticles();
+            
+            // Draw rocket
+            drawRocket();
+            
+            // Update simulation if launched
+            if (launched) {
+                updateSimulation();
+            }
+            
+            // Visual effect for rocket flame
+            rocketFlame = sin(frameCount * 0.2) * 10;
+        }
 
-                // Create new exhaust particles
-                if (frameCount % 3 === 0) {
-                    particles.push(new Particle(200, rocketY + 60));
-                }
-
-                if (rocketY < -60) {  // Reset when out of screen
-                    launched = false;
-                    rocketY = height - 50;
-                    velocity = 0;
-                    particles = [];
-                }
+        function setGradientBackground() {
+            // Earth to space transition
+            let earthColor = color(135, 206, 235); // Sky blue
+            let spaceColor = color(20, 24, 82); // Deep space blue
+            
+            // Create gradient background based on altitude
+            for (let y = 0; y < height; y++) {
+                let inter = map(y, 0, height, 0, 1);
+                let c = lerpColor(spaceColor, earthColor, inter + backgroundGradient * 0.5);
+                stroke(c);
+                line(0, y, width, y);
             }
         }
 
-        // Function to Draw Rocket
-        function drawRocket(x, y) {
-            fill(255, 0, 0);
+        function drawStars() {
+            noStroke();
+            for (let star of stars) {
+                // Twinkle effect
+                let twinkle = sin(frameCount * 0.05 * star.twinkle) * 0.5 + 0.5;
+                fill(255, 255, 255, 255 * (backgroundGradient - 0.3) * 2 * twinkle);
+                ellipse(star.x, star.y, star.size);
+            }
+        }
 
+        function drawClouds() {
+            noStroke();
+            fill(255, 255, 255, 255 * (0.7 - backgroundGradient > 0 ? 0.7 - backgroundGradient : 0) * 1.4);
+            
+            for (let cloud of clouds) {
+                // Move clouds
+                cloud.x -= cloud.speed;
+                if (cloud.x < -cloud.size) {
+                    cloud.x = width + cloud.size;
+                    cloud.y = random(height/2, height-100);
+                }
+                
+                // Draw cloud
+                ellipse(cloud.x, cloud.y, cloud.size, cloud.size * 0.6);
+                ellipse(cloud.x + cloud.size * 0.4, cloud.y - cloud.size * 0.1, cloud.size * 0.8, cloud.size * 0.5);
+                ellipse(cloud.x - cloud.size * 0.4, cloud.y - cloud.size * 0.05, cloud.size * 0.7, cloud.size * 0.4);
+            }
+        }
+
+        function drawEarth() {
+            // Draw Earth's curve at the bottom
+            noStroke();
+            fill(34, 139, 34); // Forest green
+            
+            // Earth curve gets smaller as we go higher
+            let curve = map(backgroundGradient, 0, 1, height - 50, height + earthRadius);
+            ellipse(width/2, curve + earthRadius, earthRadius * 6, earthRadius * 4);
+        }
+
+        function drawForceVectors() {
+            if (fuel > 0) {
+                // Draw action force (downward arrow)
+                stroke(255, 100, 0);
+                strokeWeight(3);
+                let arrowLength = map(acceleration, 0, 50, 0, 40);
+                
+                // Main arrow line
+                line(300, rocketY + 70, 300, rocketY + 70 + arrowLength);
+                
+                // Arrow head
+                line(300, rocketY + 70 + arrowLength, 295, rocketY + 70 + arrowLength - 5);
+                line(300, rocketY + 70 + arrowLength, 305, rocketY + 70 + arrowLength - 5);
+                
+                // Draw reaction force (upward arrow)
+                stroke(0, 100, 255);
+                
+                // Main arrow line
+                line(300, rocketY + 70, 300, rocketY + 70 - arrowLength);
+                
+                // Arrow head
+                line(300, rocketY + 70 - arrowLength, 295, rocketY + 70 - arrowLength + 5);
+                line(300, rocketY + 70 - arrowLength, 305, rocketY + 70 - arrowLength + 5);
+                
+                // Reset stroke weight
+                strokeWeight(1);
+                
+                // Label the forces
+                textSize(14);
+                textAlign(LEFT);
+                fill(255, 100, 0);
+                text("Action Force", 310, rocketY + 70 + arrowLength/2);
+                fill(0, 100, 255);
+                text("Reaction Force", 310, rocketY + 70 - arrowLength/2);
+            }
+        }
+
+        function drawRocket() {
+            push();
+            translate(300, rocketY);
+            
             // Rocket Body
-            rect(x - 20, y, 40, 60);
+            fill(rocketColor);
+            rect(-20, 0, 40, 60, 5); // Rounded corners
 
             // Nose Cone
-            fill(200, 50, 50);
-            triangle(x - 20, y, x + 20, y, x, y - 20);
+            fill(lerpColor(color(rocketColor), color(200, 50, 50), 0.5));
+            triangle(-20, 0, 20, 0, 0, -30);
+
+            // Windows
+            fill(200, 230, 255);
+            ellipse(0, 15, 15, 15);
+            fill(150, 200, 255);
+            ellipse(0, 15, 10, 10);
 
             // Side Boosters
-            fill(180, 0, 0);
-            rect(x - 30, y + 20, 10, 30);
-            rect(x + 20, y + 20, 10, 30);
+            fill(lerpColor(color(rocketColor), color(100, 0, 0), 0.3));
+            rect(-30, 20, 10, 30, 3); // Rounded corners
+            rect(20, 20, 10, 30, 3); // Rounded corners
 
-            // Flames when launched
-            if (launched) {
+            // Flame effects when launched
+            if (launched && fuel > 0) {
+                // Main engine flame
                 fill(255, 165, 0);
-                triangle(x - 10, y + 60, x + 10, y + 60, x, y + 80);
+                triangle(-15, 60, 15, 60, 0, 80 + rocketFlame);
+                fill(255, 69, 0);
+                triangle(-10, 60, 10, 60, 0, 70 + rocketFlame * 0.7);
+                
+                // Side booster flames
+                fill(255, 165, 0, 200);
+                triangle(-30, 50, -20, 50, -25, 60 + rocketFlame * 0.5);
+                triangle(20, 50, 30, 50, 25, 60 + rocketFlame * 0.5);
             }
+            
+            // Stabilizing fins
+            fill(lerpColor(color(rocketColor), color(50, 50, 50), 0.3));
+            triangle(-20, 50, -20, 60, -35, 60);
+            triangle(20, 50, 20, 60, 35, 60);
+            
+            pop();
         }
 
-        // Function to Draw Particles (Exhaust)
         function drawParticles() {
             for (let i = particles.length - 1; i >= 0; i--) {
                 particles[i].update();
@@ -269,48 +651,199 @@
             }
         }
 
+        function updateSimulation() {
+            // Update fuel level
+            if (fuel > 0) {
+                fuel -= 0.2; // Consume fuel
+                fuelLevel.style.width = fuel + "%";
+                
+                // Create exhaust particles
+                if (frameCount % 2 === 0) {
+                    particles.push(new Particle(300, rocketY + 60, fuel/100));
+                }
+                
+                // Update acceleration based on remaining fuel
+                acceleration = (parseFloat(forceInput.value) / parseFloat(massInput.value)) * (fuel/100);
+            } else {
+                acceleration = 0; // No thrust when out of fuel
+                missionStatus.textContent = "MISSION: OUT OF FUEL";
+                missionStatus.style.background = "#FFC107";
+            }
+            
+            // Apply gravity (simplified)
+            acceleration -= 9.8; // Earth's gravity
+            
+            // Update velocity
+            velocity += acceleration * 0.1; // Scale for better visualization
+            
+            // Update position
+            let prevY = rocketY;
+            rocketY -= velocity;
+            
+            // Update altitude
+            altitude += (prevY - rocketY) * 10; // Scale for better display
+            if (altitude < 0) altitude = 0;
+            
+            // Track max altitude
+            if (altitude > maxAltitude) {
+                maxAltitude = altitude;
+            }
+            
+            // Update background gradient based on altitude
+            backgroundGradient = constrain(map(altitude, 0, 10000, 0, 1), 0, 1);
+            
+            // Update telemetry displays
+            accelerationDisplay.textContent = acceleration.toFixed(1) + " m/s²";
+            altitudeDisplay.textContent = Math.round(altitude) + " m";
+            velocityDisplay.textContent = Math.abs(velocity).toFixed(1) + " m/s";
+            
+            // Check for achievements
+            checkAchievements();
+            
+            // Handle rocket going out of viewport
+            if (rocketY < -100) {
+                missionStatus.textContent = "MISSION: LEFT ATMOSPHERE";
+                missionStatus.style.background = "#4CAF50";
+                achievements.spaceExplorer = true;
+                updateAchievements();
+            }
+            
+            // Detect crash landing (negative velocity but back on ground)
+            if (rocketY >= height - 100 && velocity < 0) {
+                rocketY = height - 100;
+                velocity = 0;
+                acceleration = 0;
+                missionStatus.textContent = "MISSION: CRASHED";
+                missionStatus.style.background = "#F44336";
+                launched = false;
+            }
+        }
+
         // Particle Class (Exhaust Effect)
         class Particle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
+            constructor(x, y, intensity) {
+                this.x = x + random(-10, 10);
+                this.y = y + random(-5, 5);
+                this.vx = random(-1, 1);
                 this.vy = random(2, 5);
                 this.alpha = 255;
+                this.size = random(3, 8);
+                this.intensity = intensity || 1;
+                this.color = random() > 0.7 ? color(255, 150, 0) : color(100, 100, 100);
             }
 
             update() {
+                this.x += this.vx;
                 this.y += this.vy; // Move downward (action)
                 this.alpha -= 5; // Fade out
+                this.size *= 0.95; // Shrink
             }
 
             finished() {
-                return this.alpha < 0;
+                return this.alpha < 0 || this.size < 0.5;
             }
 
             show() {
                 noStroke();
-                fill(255, 150, 0, this.alpha);
-                ellipse(this.x, this.y, 8, 8);
+                if (random() > 0.8) {
+                    this.color = lerpColor(this.color, color(255, 150, 0), 0.1);
+                }
+                fill(red(this.color), green(this.color), blue(this.color), this.alpha * this.intensity);
+                ellipse(this.x, this.y, this.size);
             }
         }
 
-        // Function to Launch Rocket
-        function launchRocket() {
-            let mass = float(massInput.value());
-            let force = float(forceInput.value());
+        function updateMassValue() {
+            let mass = massInput.value;
+            massValue.textContent = mass + " kg";
+            updateForceBar();
+        }
 
-            if (mass > 0) {
-                acceleration = force / mass;  // F = ma → a = F/m
-                accelerationInput.value(acceleration.toFixed(2)); // Display acceleration
-                launched = true;
+        function updateForceValue() {
+            let force = forceInput.value;
+            forceValue.textContent = force + " N";
+            updateForceBar();
+        }
+
+        function updateForceBar() {
+            let force = parseFloat(forceInput.value);
+            let percentage = Math.min(force / 10000 * 100, 100);
+            forceBar.style.width = percentage + "%";
+            forceLabel.textContent = percentage.toFixed(0) + "%";
+        }
+
+        function launchRocket() {
+            if (!launched) {
+                let mass = parseFloat(massInput.value);
+                let force = parseFloat(forceInput.value);
+
+                if (mass > 0 && force > 0) {
+                    acceleration = force / mass;
+                    launched = true;
+                    fuel = 100; // Reset fuel
+                    fuelLevel.style.width = "100%";
+                    missionStatus.textContent = "MISSION: LAUNCHED";
+                    missionStatus.style.background = "#2196F3";
+                    launchButton.textContent = "IN FLIGHT 🔥";
+                    
+                    // Unlock first launch achievement
+                    achievements.firstLaunch = true;
+                    updateAchievements();
+                    
+                    // Random rocket color for fun
+                    rocketColor = random(colorOptions);
+                }
+            }
+        }
+
+        function resetRocket() {
+            launched = false;
+            rocketY = height - 100;
+            velocity = 0;
+            acceleration = 0;
+            fuel = 100;
+            altitude = 0;
+            particles = [];
+            backgroundGradient = 0;
+            
+            // Reset UI
+            accelerationDisplay.textContent = "0 m/s²";
+            altitudeDisplay.textContent = "0 m";
+            velocityDisplay.textContent = "0 m/s";
+            fuelLevel.style.width = "100%";
+            missionStatus.textContent = "MISSION: READY FOR LAUNCH";
+            missionStatus.style.background = "#E0E0E0";
+            launchButton.textContent = "LAUNCH MISSION 🚀";
+            
+            // Update controls based on current values
+            updateMassValue();
+            updateForceValue();
+        }
+
+        function checkAchievements() {
+            // Check for escape velocity achievement (simplified)
+            if (velocity > 20) {
+                achievements.escapeVelocity = true;
+            }
+            
+            updateAchievements();
+        }
+
+        function updateAchievements() {
+            // Update badge display
+            if (achievements.firstLaunch) {
+                badge1.classList.add('earned');
+            }
+            
+            if (achievements.escapeVelocity) {
+                badge2.classList.add('earned');
+            }
+            
+            if (achievements.spaceExplorer) {
+                badge3.classList.add('earned');
             }
         }
     </script>
-        <div class="button-group">
-                    
-            <button onclick="goHome()">Previous</button>
-            <button onclick="goToNextSimulation()">Completed!!</button>
-          </div>   
 </body>
 
 </html>
