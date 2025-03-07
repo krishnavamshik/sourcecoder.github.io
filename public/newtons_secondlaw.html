@@ -4,296 +4,1329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEA Early Access - Learn Newton's Laws</title>
+    <title>GEA - Newton's Second Law of Motion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
     <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --primary: #3a86ff;
+            --secondary: #8338ec;
+            --accent: #ff006e;
+            --light: #ffffff;
+            --dark: #1a1a2e;
+            --gray: #f8f9fa;
+            --text: #333333;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(to right, #f7f7f7, #e3e3e3);
-            color: #333;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--gray) 0%, #e9ecef 100%);
+            color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2rem 0;
         }
 
-        h1,
-        h2 {
-            color: #4A90E2;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 2em;
-            margin-top: 30px;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 1.1em;
-            margin-bottom: 20px;
-        }
-
-        .law-section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .simulation-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-        }
-
-        .simulation-placeholder {
-            background: #f9f9f9;
-            border: 1px dashed #ccc;
-            padding: 10px;
-            text-align: center;
-            border-radius: 5px;
-            height: 450px;
-            width: 70%;
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
         }
 
-        .simulation-instructions {
-            width: 30%;
-            background: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0.6;
+            z-index: 0;
+            transform: rotate(30deg);
         }
 
-        .simulation-controls {
-            margin-top: 20px;
+        .header-content {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Left-align items */
-            gap: 10px; /* Add spacing between items */
+            align-items: center;
         }
 
-        .simulation-controls label {
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .tag-line {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .early-access-badge {
+            background-color: var(--accent);
+            color: white;
+            font-size: 0.8rem;
             font-weight: bold;
-            margin-bottom: 5px; /* Add spacing below labels */
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
         }
 
-        .simulation-controls input {
-            width: 100px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
-        .simulation-controls button {
-            padding: 5px 10px;
-            font-size: 0.9em;
-            cursor: pointer;
-            background: #4A90E2;
+        .intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2.5rem;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .intro p {
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+
+        .law-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .law-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .law-header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white;
-            border: none;
-            border-radius: 5px;
-            margin-top: 10px; /* Add spacing above buttons */
+            padding: 1.5rem;
+            position: relative;
         }
 
-        .button-group {
-            margin-top: 20px;
+        .law-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: white;
+        }
+
+        .law-content {
+            padding: 2rem;
+        }
+
+        .law-description {
+            margin-bottom: 2rem;
+        }
+
+        .law-description p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .law-description p strong {
+            color: var(--primary);
+        }
+
+        .key-idea {
+            background-color: rgba(58, 134, 255, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .formula-box {
+            background-color: rgba(131, 56, 236, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 5px 5px 0;
+            text-align: center;
+        }
+
+        .formula-box p {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        .simulation-container {
             display: flex;
-            justify-content: center;
-            gap: 600px;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        .button-group button {
-            padding: 10px 20px;
-            background: #4A90E2;
+        @media (min-width: 768px) {
+            .simulation-container {
+                flex-direction: row;
+                align-items: stretch;
+            }
+        }
+
+        .simulation-wrapper {
+            flex: 7;
+            background: var(--gray);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .simulation-placeholder {
+            width: 100%;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .simulation-placeholder canvas {
+            display: block;
+            border-radius: 10px;
+        }
+
+        .instructions-panel {
+            flex: 3;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .instructions-content h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .instruction-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .step-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+            font-size: 0.8rem;
+        }
+
+        .step-text {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        .control-field {
+            margin-bottom: 1rem;
+        }
+
+        .control-field label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .control-field input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .control-field input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.2);
+        }
+
+        .control-field input[readonly] {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .control-button {
+            flex: 1;
+            background-color: var(--primary);
             color: white;
             border: none;
+            padding: 0.8rem 1rem;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-button:hover {
+            background-color: #2a75e6;
+            transform: translateY(-2px);
+        }
+
+        .control-button i {
+            margin-right: 8px;
+        }
+
+        .control-button.reset {
+            background-color: var(--dark);
+        }
+
+        .control-button.reset:hover {
+            background-color: #262639;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .nav-button.home {
+            background-color: var(--dark);
+        }
+
+        .nav-button.home:hover {
+            background-color: #262639;
+        }
+
+        .nav-button i {
+            margin: 0 8px;
+        }
+
+        .real-world-example {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border: 1px dashed #dee2e6;
+        }
+
+        .real-world-example h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Slider styling */
+        .slider-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: var(--secondary);
+        }
+
+        .slider-value {
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Analytics panel */
+        .analytics-panel {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .analytics-card {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .analytics-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .analytics-card:not(:last-child) {
+            margin-right: 1rem;
+        }
+
+        .analytics-card h4 {
+            color: var(--dark);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-unit {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        @media (max-width: 767px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .law-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .simulation-placeholder {
+                height: 350px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .analytics-panel {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .analytics-card:not(:last-child) {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
         }
     </style>
 </head>
 
 <body>
+    <header>
+        <div class="header-content">
+            <h1>Newton's Laws of Motion</h1>
+            <p class="tag-line">Interactive Physics Simulations</p>
+            <div class="early-access-badge">Early Access</div>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>Learn Newton's Laws of Motion</h1>
-        <p>Welcome to GEA's Early Access! Here, you’ll explore <strong>Newton's Laws of Motion</strong>—the foundation
-            of physics. These laws explain how objects move and interact with forces. Let’s dive in and learn through
-            interactive simulations!</p>
+        <div class="intro">
+            <p>Welcome to GEA's Early Access! 🚀 Experience Newton's Laws of Motion through interactive simulations that make physics intuitive and engaging. Discover how forces shape movement and see science in action.</p>
+        </div>
 
-        <!-- Second Law Section -->
         <div class="law-section">
-            <h2>Second Law: The Law of Acceleration</h2>
-            <p><strong>"The acceleration of an object depends on the force applied and the mass of the object."</strong>
-            </p>
-            <p><strong>What does this mean?</strong> If you push a shopping cart lightly, it moves slowly. If you push
-                it harder, it moves faster. But if the cart is full (more mass), the same push will make it move slower.
-            </p>
-            <p><strong>Formula:</strong> Force = Mass × Acceleration (F = ma)</p>
-            <p><strong>Key Idea:</strong> The more force you apply, the faster an object accelerates, but heavier
-                objects need more force to move.</p>
-
-            <!-- Simulation Container -->
-            <div class="simulation-container">
-                <!-- Simulation Placeholder -->
-                <div id="second-law-simulation" class="simulation-placeholder">
-
+            <div class="law-header">
+                <h2>Second Law: The Law of Acceleration</h2>
+            </div>
+            <div class="law-content">
+                <div class="law-description">
+                    <p><strong>"The acceleration of an object is directly proportional to the force applied and inversely proportional to its mass."</strong></p>
+                    <p>This law explains why a small force can easily move a light object, but it takes a much greater force to move a heavy object with the same acceleration. Think about a sports car versus a heavy truck - the car accelerates faster with the same engine power because it has less mass.</p>
+                    
+                    <div class="formula-box">
+                        <p>F = m × a</p>
+                    </div>
+                    
+                    <div class="key-idea">
+                        <p><strong>Key Idea:</strong> The stronger the force, the faster an object accelerates. The greater the mass, the more force is needed to achieve the same acceleration.</p>
+                    </div>
                 </div>
 
-                <!-- Instructions -->
-                <div class="simulation-instructions">
-                    <p><strong>Car Acceleration Simulation</strong></p>
-                    <p>Adjust the mass and force to see how the car accelerates.</p>
-                    <p>Click "Apply Force" to see the car move!</p>
-                    <p>Use "Reset" to start over.</p>
-
-                    <!-- Input Fields -->
-                    <div class="simulation-controls">
-                        <label for="massInput">Mass (kg)</label>
-                        <input type="number" id="massInput" value="100">
-
-                        <label for="forceInput">Force (N)</label>
-                        <input type="number" id="forceInput" value="0">
-
-                        <label for="accelerationDisplay">Acceleration (m/s²)</label>
-                        <input type="text" id="accelerationDisplay" readonly>
-
-                        <button id="applyForceButton">Apply Force 🚀</button>
-                        <button id="resetButton">Reset 🔄</button>
+                <div class="simulation-container">
+                    <div class="simulation-wrapper">
+                        <div id="second-law-simulation" class="simulation-placeholder">
+                            <!-- p5.js canvas will be placed here -->
+                        </div>
                     </div>
+
+                    <div class="instructions-panel">
+                        <div class="instructions-content">
+                            <h3>Car Acceleration Simulator</h3>
+                            
+                            <div class="instruction-step">
+                                <div class="step-icon">1</div>
+                                <div class="step-text">Adjust the mass of the vehicle using the slider</div>
+                            </div>
+                            
+                            <div class="instruction-step">
+                                <div class="step-icon">2</div>
+                                <div class="step-text">Set the force to apply to the vehicle</div>
+                            </div>
+                            
+                            <div class="instruction-step">
+                                <div class="step-icon">3</div>
+                                <div class="step-text">Press "Apply Force" to see Newton's Second Law in action!</div>
+                            </div>
+                            
+                            <div class="slider-container">
+                                <label for="massSlider">Mass (kg):</label>
+                                <div class="slider-wrapper">
+                                    <input type="range" min="50" max="500" value="100" class="slider" id="massSlider">
+                                    <span class="slider-value" id="massValue">100</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <label for="forceSlider">Force (N):</label>
+                                <div class="slider-wrapper">
+                                    <input type="range" min="0" max="1000" value="200" class="slider" id="forceSlider">
+                                    <span class="slider-value" id="forceValue">200</span>
+                                </div>
+                            </div>
+
+                            <div class="control-field">
+                                <label for="accelerationDisplay">Acceleration (m/s²):</label>
+                                <input type="text" id="accelerationDisplay" value="0" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="control-buttons">
+                            <button class="control-button" id="applyForceButton">
+                                <i class="fas fa-rocket"></i> Apply Force
+                            </button>
+                            <button class="control-button reset" id="resetButton">
+                                <i class="fas fa-redo-alt"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-panel">
+                    <div class="analytics-card">
+                        <h4>Distance</h4>
+                        <div class="analytics-value" id="distanceValue">0</div>
+                        <div class="analytics-unit">meters</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Velocity</h4>
+                        <div class="analytics-value" id="velocityValue">0</div>
+                        <div class="analytics-unit">m/s</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Acceleration</h4>
+                        <div class="analytics-value" id="accelValue">0</div>
+                        <div class="analytics-unit">m/s²</div>
+                    </div>
+                </div>
+
+                <div class="real-world-example">
+                    <h3>Real-World Applications</h3>
+                    <p>Newton's Second Law is essential in countless real-world scenarios:</p>
+                    <p>• Car manufacturers use this principle to design vehicles with optimal power-to-weight ratios</p>
+                    <p>• Rockets need tremendous force to overcome their mass and Earth's gravity</p>
+                    <p>• Sports equipment designers leverage this law to create faster, more responsive gear</p>
+                    <p>• Even when braking a car, you're applying this law in reverse - the braking force creates negative acceleration</p>
                 </div>
             </div>
         </div>
 
-        <!-- Centered Buttons -->
-        <div class="button-group">
-            <button onclick="goHome()">Back to Home</button>
-            <button onclick="goToNextSimulation()">Next Simulation →</button>
+        <div class="navigation">
+            <button class="nav-button home" onclick="goHome()">
+                <i class="fas fa-home"></i> Back to Home
+            </button>
+            <button class="nav-button" onclick="goToNextSimulation()">
+                Next: Third Law <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
     </div>
 
     <script>
-        function goToNextSimulation() {
-            window.location.href = 'newtons_thirdlaw.html';
-        }
-        function goHome() {
-            window.location.href = 'early-access.html';
-        }
-    </script>
-
-    <!-- p5.js Simulation for Second Law -->
-    <script>
+        // Variables for simulation
         let carX = 50;
         let velocity = 0;
         let acceleration = 0;
-        let massInput, forceInput, accelerationDisplay;
-        let applyForceButton, resetButton;
-        let force = 0;
+        let mass = 100;
+        let force = 200;
         let friction = 0.01; // Simulated air resistance
-
+        let distance = 0;
+        let isMoving = false;
+        let carColor = '#3a86ff';
+        let roadY;
+        let clouds = [];
+        let stars = [];
+        let isDayTime = true;
+        let skyColor;
+        let trees = [];
+        let buildings = [];
+        let particles = [];
+        
+        // DOM elements
+        let massSlider, forceSlider, massValue, forceValue, accelerationDisplay;
+        let applyForceButton, resetButton;
+        let distanceValue, velocityValue, accelValue;
+        
         function setup() {
-            const canvas = createCanvas(600, 300);
-            canvas.parent('second-law-simulation'); // Attach to the simulation div
-
-            // Input for Mass
-            massInput = document.getElementById('massInput');
-            forceInput = document.getElementById('forceInput');
+            // Create canvas within the simulation container
+            const simulationContainer = document.getElementById('second-law-simulation');
+            const canvasWidth = simulationContainer.offsetWidth;
+            const canvasHeight = simulationContainer.offsetHeight;
+            
+            const canvas = createCanvas(canvasWidth, canvasHeight);
+            canvas.parent('second-law-simulation');
+            
+            // Get DOM elements
+            massSlider = document.getElementById('massSlider');
+            forceSlider = document.getElementById('forceSlider');
+            massValue = document.getElementById('massValue');
+            forceValue = document.getElementById('forceValue');
             accelerationDisplay = document.getElementById('accelerationDisplay');
             applyForceButton = document.getElementById('applyForceButton');
             resetButton = document.getElementById('resetButton');
-
+            distanceValue = document.getElementById('distanceValue');
+            velocityValue = document.getElementById('velocityValue');
+            accelValue = document.getElementById('accelValue');
+            
+            // Add event listeners
+            massSlider.addEventListener('input', updateMass);
+            forceSlider.addEventListener('input', updateForce);
             applyForceButton.addEventListener('click', applyForce);
             resetButton.addEventListener('click', resetCar);
+            
+            // Initialize roadY position
+            roadY = height - 50;
+            
+            // Generate background elements
+            generateClouds();
+            generateStars();
+            generateTrees();
+            generateBuildings();
+            
+            // Set some styling for the canvas
+            document.querySelector('canvas').style.boxShadow = 'inset 0 0 10px rgba(0,0,0,0.1)';
         }
 
         function draw() {
-            background(220);
-
-            // Draw Road
-            stroke(0);
-            line(0, height - 50, width, height - 50);
-
-            // Apply motion updates
+            // Create a dynamic skybox
+            skyColor = isDayTime ? 
+                color(135 - carX/10, 206 - carX/15, 235 - carX/20) : 
+                color(20 + carX/50, 24 + carX/60, 54 + carX/70);
+            background(skyColor);
+            
+            // Draw stars if night time
+            if (!isDayTime) {
+                drawStars();
+            }
+            
+            // Draw clouds
+            drawClouds();
+            
+            // Draw buildings in the background
+            drawBuildings();
+            
+            // Draw trees along the road
+            drawTrees();
+            
+            // Draw ground/road
+            drawRoad();
+            
+            // Apply physics if car is moving
+            if (isMoving) {
+                updatePhysics();
+                
+                // Create particle effects when accelerating
+                if (abs(acceleration) > 0.5) {
+                    createExhaustParticle();
+                }
+            }
+            
+            // Draw car
+            drawCar(carX, roadY - 40);
+            
+            // Draw particles (exhaust, etc.)
+            updateAndDrawParticles();
+            
+            // Draw speed lines if moving fast
+            if (abs(velocity) > 5) {
+                drawSpeedLines();
+            }
+            
+            // Toggle day/night based on position
+            if (carX > width * 0.6 && isDayTime) {
+                isDayTime = false;
+            } else if (carX < width * 0.3 && !isDayTime) {
+                isDayTime = true;
+            }
+            
+            // Draw measurements and indicators
+            drawMeasurements();
+        }
+        
+        function updatePhysics() {
+            // Apply motion physics
+            acceleration = force / mass;
             velocity += acceleration;
             velocity *= (1 - friction); // Apply friction
             carX += velocity;
-
-            // Draw Car
-            drawCar(carX, height - 90); // Adjusted y-position for better alignment
-
+            distance += abs(velocity) / 60; // Convert to realistic distance
+            
+            // Update UI displays
+            distanceValue.textContent = distance.toFixed(1);
+            velocityValue.textContent = abs(velocity).toFixed(1);
+            accelValue.textContent = acceleration.toFixed(2);
+            
             // Stop car at the right boundary
-            if (carX > width - 100) {
-                carX = width - 100;
+            if (carX > width - 150) {
+                carX = width - 150;
                 velocity = 0;
+                isMoving = false;
             }
         }
-
-        // Function to draw the car
+        
+        function drawRoad() {
+            // Draw ground
+            fill(70, 70, 70);
+            rect(0, roadY, width, height - roadY);
+            
+            // Road markings
+            stroke(255, 255, 255);
+            strokeWeight(3);
+            for (let x = 0; x < width; x += 40) {
+                line(x, roadY + 25, x + 20, roadY + 25);
+            }
+            noStroke();
+        }
+        
         function drawCar(x, y) {
-            // Car Body
-            fill(255, 0, 0); // Red color for the car body
-            rect(x, y, 80, 40, 5); // Car body with rounded corners
-
+            push();
+            
+            // Car shadow
+            fill(0, 0, 0, 30);
+            ellipse(x + 40, roadY - 3, 100, 10);
+            
+            // Car dynamics (slight bounce based on speed)
+            let bounce = sin(frameCount * 0.1) * constrain(abs(velocity) * 0.05, 0, 3);
+            
+            // Car body
+            fill(carColor);
+            beginShape();
+            vertex(x, y + 20 + bounce);
+            vertex(x + 15, y + bounce);
+            vertex(x + 30, y - 10 + bounce);
+            vertex(x + 70, y - 10 + bounce);
+            vertex(x + 85, y + bounce);
+            vertex(x + 95, y + 20 + bounce);
+            vertex(x, y + 20 + bounce);
+            endShape();
+            
+            // Car roof
+            fill(carColor);
+            rect(x + 35, y - 10 + bounce, 30, 12, 3);
+            
             // Windows
-            fill(173, 216, 230); // Light blue for windows
-            rect(x + 10, y + 5, 25, 20, 3); // Left window
-            rect(x + 45, y + 5, 25, 20, 3); // Right window
-
-            // Windshield
-            fill(200, 200, 255); // Light blue for windshield
-            rect(x + 35, y + 5, 10, 20, 2); // Windshield
-
-            // Wheels
-            fill(0); // Black for wheels
-            ellipse(x + 15, y + 40, 20, 20); // Left wheel
-            ellipse(x + 65, y + 40, 20, 20); // Right wheel
-
-            // Wheel Rims
-            fill(192, 192, 192); // Silver for rims
-            ellipse(x + 15, y + 40, 12, 12); // Left rim
-            ellipse(x + 65, y + 40, 12, 12); // Right rim
-
+            fill(173, 216, 230, 200);
+            quad(x + 35, y - 10 + bounce, 
+                 x + 30, y + bounce, 
+                 x + 70, y + bounce, 
+                 x + 65, y - 10 + bounce);
+            
+            // Wheels with dynamic rotation
+            let rotation = frameCount * 0.05 + (velocity * 0.02);
+            drawWheel(x + 25, y + 20 + bounce, rotation);
+            drawWheel(x + 75, y + 20 + bounce, rotation);
+            
             // Headlights
-            fill(255, 255, 0); // Yellow for headlights
-            ellipse(x + 5, y + 15, 10, 10); // Left headlight
-            ellipse(x + 75, y + 15, 10, 10); // Right headlight
+            if (!isDayTime) {
+                // Headlight beams at night
+                fill(255, 255, 100, 30);
+                triangle(x + 95, y + 10 + bounce, 
+                         x + 95, y + 20 + bounce, 
+                         x + 250, y + 30 + bounce);
+                
+                // Headlight glare
+                drawingContext.shadowBlur = 15;
+                drawingContext.shadowColor = 'rgba(255, 255, 0, 0.8)';
+            }
+            
+            // Headlights
+            fill(255, 255, 0);
+            ellipse(x + 95, y + 15 + bounce, 5, 5);
+            
+            // Reset shadow effect
+            drawingContext.shadowBlur = 0;
+            
+            // Taillights
+            fill(255, 0, 0);
+            rect(x + 2, y + 10 + bounce, 5, 5, 1);
+            
+            pop();
         }
+        
+        function drawWheel(x, y, rotation) {
+            push();
+            translate(x, y);
+            rotate(rotation);
+            
+            // Tire
+            fill(30, 30, 30);
+            ellipse(0, 0, 20, 20);
+            
+            // Rim
+            fill(200, 200, 200);
+            ellipse(0, 0, 12, 12);
+            
+            // Spokes
+            stroke(100, 100, 100);
+            strokeWeight(2);
+            for (let i = 0; i < 4; i++) {
+                let angle = i * PI / 2;
+                line(0, 0, 5 * cos(angle), 5 * sin(angle));
+            }
+            noStroke();
+            
+            pop();
+        }
+        
+        function drawMeasurements() {
+            // Only draw detailed measurements if we're moving
+            if (!isMoving && acceleration === 0) return;
+            
+            // Draw force arrow
+            if (acceleration !== 0) {
+                let arrowLength = map(force, 0, 1000, 0, 100);
+                let arrowX = carX + 100;
+                let arrowY = roadY - 70;
+                
+                stroke(255, 0, 0);
+                strokeWeight(3);
+                line(arrowX, arrowY, arrowX + arrowLength, arrowY);
+                fill(255, 0, 0);
+                triangle(
+                    arrowX + arrowLength, arrowY,
+                    arrowX + arrowLength - 10, arrowY - 5,
+                    arrowX + arrowLength - 10, arrowY + 5
+                );
+                
+                // Force label
+                noStroke();
+                fill(255, 0, 0);
+                textSize(12);
+                text(`Force: ${force}N`, arrowX + arrowLength / 2, arrowY - 10);
+            }
+            
+           // The code continues from where it was cut off:
 
-        // Function to apply force
-        function applyForce() {
-            let mass = parseFloat(massInput.value);
-            force = parseFloat(forceInput.value);
-
-            if (mass > 0) {
-                acceleration = force / mass; // F = ma
-                accelerationDisplay.value = acceleration.toFixed(2); // Update UI
+            // Draw acceleration indicator
+            if (acceleration !== 0) {
+                let accY = roadY - 100;
+                let accX = carX + 50;
+                
+                noStroke();
+                fill(0, 128, 255);
+                textSize(14);
+                textAlign(CENTER);
+                text(`a = ${acceleration.toFixed(2)} m/s²`, accX, accY);
+                
+                // Formula visualization
+                let formulaY = roadY - 120;
+                textSize(16);
+                fill(255);
+                textAlign(CENTER);
+                text(`F = m × a`, accX, formulaY);
+                textSize(14);
+                text(`${force}N = ${mass}kg × ${acceleration.toFixed(2)}m/s²`, accX, formulaY + 20);
             }
         }
-
-        // Function to reset the simulation
+        
+        function generateClouds() {
+            clouds = [];
+            for (let i = 0; i < 10; i++) {
+                clouds.push({
+                    x: random(width),
+                    y: random(50, 120),
+                    width: random(60, 150),
+                    height: random(30, 50),
+                    speed: random(0.1, 0.3)
+                });
+            }
+        }
+        
+        function drawClouds() {
+            fill(255, 255, 255, isDayTime ? 230 : 100);
+            noStroke();
+            
+            // Update and draw each cloud
+            for (let cloud of clouds) {
+                // Move cloud
+                cloud.x -= cloud.speed;
+                
+                // Wrap around when off screen
+                if (cloud.x + cloud.width < 0) {
+                    cloud.x = width + cloud.width;
+                    cloud.y = random(50, 120);
+                }
+                
+                // Draw cloud as a group of ellipses
+                let cloudX = cloud.x;
+                let cloudY = cloud.y;
+                let cloudWidth = cloud.width;
+                let cloudHeight = cloud.height;
+                
+                ellipse(cloudX, cloudY, cloudWidth * 0.4, cloudHeight);
+                ellipse(cloudX + cloudWidth * 0.2, cloudY - cloudHeight * 0.2, cloudWidth * 0.5, cloudHeight * 0.8);
+                ellipse(cloudX + cloudWidth * 0.4, cloudY, cloudWidth * 0.4, cloudHeight * 1.1);
+                ellipse(cloudX + cloudWidth * 0.6, cloudY - cloudHeight * 0.1, cloudWidth * 0.5, cloudHeight * 0.9);
+            }
+        }
+        
+        function generateStars() {
+            stars = [];
+            for (let i = 0; i < 100; i++) {
+                stars.push({
+                    x: random(width),
+                    y: random(height / 2),
+                    size: random(1, 3),
+                    brightness: random(150, 255)
+                });
+            }
+        }
+        
+        function drawStars() {
+            for (let star of stars) {
+                // Make stars twinkle
+                let brightness = star.brightness + sin(frameCount * 0.05 + star.x) * 30;
+                
+                // Draw star
+                fill(brightness, brightness, brightness, 200);
+                noStroke();
+                ellipse(star.x, star.y, star.size, star.size);
+                
+                // Occasional shooting star
+                if (random(1000) < 1) {
+                    stroke(255, 255, 255, 200);
+                    strokeWeight(1);
+                    let tailLength = random(30, 80);
+                    let angle = random(PI/4, PI/2);
+                    line(star.x, star.y, star.x + cos(angle) * tailLength, star.y + sin(angle) * tailLength);
+                }
+            }
+        }
+        
+        function generateTrees() {
+            trees = [];
+            for (let i = 0; i < 20; i++) {
+                trees.push({
+                    x: random(width),
+                    y: roadY,
+                    height: random(50, 100),
+                    width: random(30, 60),
+                    type: floor(random(3))
+                });
+            }
+        }
+        
+        function drawTrees() {
+            for (let tree of trees) {
+                // Only draw trees that are visible
+                if (tree.x + tree.width < 0) {
+                    tree.x = width + tree.width;
+                }
+                
+                // Calculate tree position in parallax
+                let parallaxX = tree.x - (carX * 0.1);
+                
+                switch(tree.type) {
+                    case 0: // Pine tree
+                        drawPineTree(parallaxX, tree.y, tree.height, tree.width);
+                        break;
+                    case 1: // Rounded tree
+                        drawRoundTree(parallaxX, tree.y, tree.height, tree.width);
+                        break;
+                    case 2: // Bush
+                        drawBush(parallaxX, tree.y, tree.height * 0.5, tree.width);
+                        break;
+                }
+            }
+        }
+        
+        function drawPineTree(x, y, height, width) {
+            // Trunk
+            fill(101, 67, 33);
+            rect(x + width/2 - 5, y - height * 0.3, 10, height * 0.3);
+            
+            // Tree layers
+            let green = isDayTime ? color(34, 139, 34) : color(25, 80, 25);
+            fill(green);
+            triangle(
+                x, y - height * 0.3,
+                x + width, y - height * 0.3,
+                x + width/2, y - height
+            );
+            
+            // Second layer
+            triangle(
+                x + width * 0.2, y - height * 0.5,
+                x + width * 0.8, y - height * 0.5,
+                x + width/2, y - height * 0.8
+            );
+            
+            // Top layer
+            triangle(
+                x + width * 0.3, y - height * 0.7,
+                x + width * 0.7, y - height * 0.7,
+                x + width/2, y - height
+            );
+        }
+        
+        function drawRoundTree(x, y, height, width) {
+            // Trunk
+            fill(101, 67, 33);
+            rect(x + width/2 - width * 0.1, y - height * 0.3, width * 0.2, height * 0.3);
+            
+            // Foliage
+            let green = isDayTime ? color(50, 150, 50) : color(30, 80, 30);
+            fill(green);
+            ellipse(x + width/2, y - height * 0.5, width, height * 0.7);
+        }
+        
+        function drawBush(x, y, height, width) {
+            let green = isDayTime ? color(60, 160, 60) : color(35, 90, 35);
+            fill(green);
+            arc(x + width/2, y, width, height * 2, PI, TWO_PI);
+        }
+        
+        function generateBuildings() {
+            buildings = [];
+            for (let i = 0; i < 8; i++) {
+                buildings.push({
+                    x: i * width / 4,
+                    y: roadY,
+                    width: random(80, 150),
+                    height: random(100, 200),
+                    windows: floor(random(3, 8)),
+                    floors: floor(random(3, 8)),
+                    color: color(random(50, 150))
+                });
+            }
+        }
+        
+        function drawBuildings() {
+            for (let building of buildings) {
+                // Calculate building position with parallax
+                let parallaxX = building.x - (carX * 0.05);
+                
+                // Draw building base
+                fill(building.color);
+                rect(parallaxX, building.y - building.height, building.width, building.height);
+                
+                // Draw windows
+                drawBuildingWindows(
+                    parallaxX, 
+                    building.y - building.height, 
+                    building.width, 
+                    building.height, 
+                    building.windows, 
+                    building.floors
+                );
+            }
+        }
+        
+        function drawBuildingWindows(x, y, width, height, columns, rows) {
+            let windowWidth = width / (columns + 1);
+            let windowHeight = height / (rows + 1);
+            let windowColor = isDayTime ? color(173, 216, 230) : color(255, 255, 150, 150);
+            
+            for (let i = 0; i < columns; i++) {
+                for (let j = 0; j < rows; j++) {
+                    // Determine if window is lit (at night) based on random pattern
+                    if (!isDayTime) {
+                        // Some windows are dark at night
+                        if (random() < 0.3) {
+                            windowColor = color(50, 50, 60);
+                        } else {
+                            windowColor = color(255, 255, 150, 150 + random(100));
+                        }
+                    }
+                    
+                    fill(windowColor);
+                    rect(
+                        x + (i + 1) * width / (columns + 1) - windowWidth/2,
+                        y + (j + 1) * height / (rows + 1) - windowHeight/2,
+                        windowWidth * 0.7,
+                        windowHeight * 0.7,
+                        2
+                    );
+                }
+            }
+        }
+        
+        function drawSpeedLines() {
+            stroke(255, 255, 255, 50);
+            strokeWeight(1);
+            
+            // Number of lines based on speed
+            let numLines = map(abs(velocity), 5, 20, 5, 20);
+            
+            for (let i = 0; i < numLines; i++) {
+                let lineX = random(carX - 100, carX);
+                let lineY = random(roadY - 60, roadY - 10);
+                let lineLength = map(abs(velocity), 5, 20, 20, 100);
+                
+                line(lineX, lineY, lineX - lineLength, lineY);
+            }
+        }
+        
+        function createExhaustParticle() {
+            // Create exhaust particles when car is accelerating
+            if (frameCount % 2 === 0) {
+                particles.push({
+                    x: carX + 5,
+                    y: roadY - 15,
+                    vx: -random(1, 3),
+                    vy: -random(0.5, 1.5),
+                    alpha: 200,
+                    size: random(3, 8),
+                    type: 'exhaust'
+                });
+            }
+        }
+        
+        function updateAndDrawParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                
+                // Update particle position
+                p.x += p.vx;
+                p.y += p.vy;
+                
+                // Update properties
+                p.alpha -= 5;
+                p.size *= 0.95;
+                
+                // Draw particle
+                if (p.type === 'exhaust') {
+                    noStroke();
+                    fill(100, 100, 100, p.alpha);
+                    ellipse(p.x, p.y, p.size, p.size);
+                }
+                
+                // Remove particles that fade out
+                if (p.alpha <= 0 || p.size < 0.5) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+        
+        function updateMass() {
+            mass = parseInt(massSlider.value);
+            massValue.textContent = mass;
+            
+            // Update acceleration display if moving
+            if (isMoving) {
+                acceleration = force / mass;
+                accelerationDisplay.value = acceleration.toFixed(2);
+            }
+            
+            // Visual feedback - change car color based on mass
+            let massPercent = (mass - 50) / 450; // 50 to 500 range
+            carColor = color(
+                lerp(58, 100, massPercent),
+                lerp(134, 50, massPercent),
+                lerp(255, 50, massPercent)
+            );
+        }
+        
+        function updateForce() {
+            force = parseInt(forceSlider.value);
+            forceValue.textContent = force;
+            
+            // Update acceleration display if moving
+            if (isMoving) {
+                acceleration = force / mass;
+                accelerationDisplay.value = acceleration.toFixed(2);
+            }
+        }
+        
+        function applyForce() {
+            // Reset car if it's at the end
+            if (carX >= width - 100) {
+                resetCar();
+            }
+            
+            // Calculate acceleration based on F = ma
+            acceleration = force / mass;
+            accelerationDisplay.value = acceleration.toFixed(2);
+            isMoving = true;
+            
+            // Vibrate the button for tactile feedback
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+            
+            // Visual button feedback
+            applyForceButton.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                applyForceButton.style.transform = 'scale(1)';
+            }, 100);
+        }
+        
         function resetCar() {
             carX = 50;
             velocity = 0;
             acceleration = 0;
+            distance = 0;
+            isMoving = false;
+            
+            // Reset displays
             accelerationDisplay.value = "0";
+            distanceValue.textContent = "0";
+            velocityValue.textContent = "0";
+            accelValue.textContent = "0";
+            
+            // Visual button feedback
+            resetButton.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                resetButton.style.transform = 'scale(1)';
+            }, 100);
+        }
+        
+        // Navigation functions
+        function goHome() {
+            window.location.href = "index.html";
+        }
+        
+        function goToNextSimulation() {
+            window.location.href = "newtons_thirdlaw.html";
+        }
+        
+        // Make the canvas responsive
+        function windowResized() {
+            const simulationContainer = document.getElementById('second-law-simulation');
+            const canvasWidth = simulationContainer.offsetWidth;
+            const canvasHeight = simulationContainer.offsetHeight;
+            
+            resizeCanvas(canvasWidth, canvasHeight);
+            roadY = height - 50;
         }
     </script>
 </body>
-
 </html>

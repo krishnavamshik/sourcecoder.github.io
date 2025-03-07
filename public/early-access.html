@@ -4,285 +4,783 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEA Early Access - Learn Newton's Laws</title>
+    <title>GEA - Newton's Laws of Motion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
     <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --primary: #3a86ff;
+            --secondary: #8338ec;
+            --accent: #ff006e;
+            --light: #ffffff;
+            --dark: #1a1a2e;
+            --gray: #f8f9fa;
+            --text: #333333;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(to right, #f7f7f7, #e3e3e3);
-            color: #333;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--gray) 0%, #e9ecef 100%);
+            color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2rem 0;
         }
 
-        h1,
-        h2 {
-            color: #4A90E2;
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0.6;
+            z-index: 0;
+            transform: rotate(30deg);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 2.8rem;
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
         }
 
-        h2 {
-            font-size: 2em;
-            margin-top: 30px;
-            margin-bottom: 10px;
+        .tag-line {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0.9;
         }
 
-        p {
-            font-size: 1.1em;
-            margin-bottom: 20px;
+        .early-access-badge {
+            background-color: var(--accent);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2.5rem;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .intro p {
+            font-size: 1.1rem;
+            margin-bottom: 0;
         }
 
         .law-section {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .law-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .law-header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .law-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: white;
+        }
+
+        .law-content {
+            padding: 2rem;
+        }
+
+        .law-description {
+            margin-bottom: 2rem;
+        }
+
+        .law-description p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .law-description p strong {
+            color: var(--primary);
+        }
+
+        .key-idea {
+            background-color: rgba(58, 134, 255, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 5px 5px 0;
         }
 
         .simulation-container {
             display: flex;
-            gap: 20px; /* Space between simulation and instructions */
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .simulation-container {
+                flex-direction: row;
+                align-items: stretch;
+            }
+        }
+
+        .simulation-wrapper {
+            flex: 7;
+            background: var(--gray);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
         }
 
         .simulation-placeholder {
-            background: #f9f9f9;
-            border: 1px dashed #ccc;
-            padding: 10px;
-            text-align: center;
-            border-radius: 5px;
+            width: 100%;
             height: 450px;
-            width: 70%; /* Simulation takes 70% of the width */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
 
-        .instructions {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 30%; /* Instructions take 30% of the width */
-            height: 450px; /* Match height with simulation */
+        .simulation-placeholder canvas {
+            display: block;
+            border-radius: 10px;
+        }
+
+        .instructions-panel {
+            flex: 3;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .instructions p {
-            margin: 5px 0;
-            font-size: 0.9em;
-            color: #555;
+        .instructions-content h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
 
-        .button-group {
-            margin-top: 20px;
+        .instruction-step {
             display: flex;
-            justify-content: center;
-            gap: 600px;
+            align-items: flex-start;
+            margin-bottom: 1rem;
         }
 
-        .button-group button {
-            padding: 10px 30px;
-            background: #4A90E2;
+        .step-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+            font-size: 0.8rem;
+        }
+
+        .step-text {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        .reset-button {
+            background-color: var(--primary);
             color: white;
             border: none;
+            padding: 0.8rem 1.5rem;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .reset-button:hover {
+            background-color: #2a75e6;
+        }
+
+        .reset-button i {
+            margin-right: 8px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .nav-button.home {
+            background-color: var(--dark);
+        }
+
+        .nav-button.home:hover {
+            background-color: #262639;
+        }
+
+        .nav-button i {
+            margin: 0 8px;
+        }
+
+        .real-world-example {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border: 1px dashed #dee2e6;
+        }
+
+        .real-world-example h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 767px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .law-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .simulation-placeholder {
+                height: 350px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 
 <body>
+    <header>
+        <div class="header-content">
+            <h1>Newton's Laws of Motion</h1>
+            <p class="tag-line">Interactive Physics Simulations</p>
+            <div class="early-access-badge">Early Access</div>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>Learn Newton's Laws of Motion</h1>
-        <p>Welcome to GEA’s Early Access! 🚀 Get ready to experience Newton’s Laws of Motion like never before! 
-            This is just the beginning—a sneak peek into how GEA will make learning interactive, fun, and intuitive.
-             Dive into hands-on simulations that bring physics to life, explore how forces shape movement,
-             and see science in action. This is an early access version, 
-             designed to give you a glimpse of what’s coming next—stay tuned for more!</p>
+        <div class="intro">
+            <p>Welcome to GEA's Early Access! 🚀 Experience Newton's Laws of Motion through interactive simulations that make physics intuitive and engaging. Discover how forces shape movement and see science in action.</p>
+        </div>
 
-        <!-- First Law Section -->
         <div class="law-section">
-            <h2>First Law: The Law of Inertia</h2>
-            <p><strong>"An object at rest stays at rest, and an object in motion stays in motion unless acted upon by an
-                    external force."</strong></p>
-            <p><strong>What does this mean?</strong> Imagine a soccer ball lying on the ground. It won’t move unless you
-                kick it. Similarly, if you roll the ball, it will keep rolling forever unless something stops it (like
-                friction or gravity).</p>
-            <p><strong>Key Idea:</strong> Objects resist changes to their state of motion. This resistance is called
-                <strong>inertia</strong>.
-            </p>
-
-            <!-- Simulation and Instructions Container -->
-            <div class="simulation-container">
-                <!-- Simulation Placeholder -->
-                <div id="first-law-simulation" class="simulation-placeholder">
+            <div class="law-header">
+                <h2>First Law: The Law of Inertia</h2>
+            </div>
+            <div class="law-content">
+                <div class="law-description">
+                    <p><strong>"An object at rest stays at rest, and an object in motion stays in motion unless acted upon by an external force."</strong></p>
+                    <p>Imagine a soccer ball on the field. It won't move unless you kick it. Similarly, if you roll it, the ball would continue rolling forever if there were no friction or other forces to stop it.</p>
+                    
+                    <div class="key-idea">
+                        <p><strong>Key Idea:</strong> Objects resist changes to their state of motion. This resistance is called <strong>inertia</strong>.</p>
+                    </div>
                 </div>
 
-                <!-- Instructions -->
-                <div class="instructions">
-                    <p><strong>Slingshot Simulation</strong></p>
-                    <p>Click on red ball, Drag & release the small ball to launch it.</p>
-                    <p>Watch it collide and move the big ball!</p>
-                    <p>Both balls will bounce off the walls and ground.</p>
+                <div class="simulation-container">
+                    <div class="simulation-wrapper">
+                        <div id="first-law-simulation" class="simulation-placeholder">
+                            <!-- p5.js canvas will be placed here -->
+                        </div>
+                    </div>
+
+                    <div class="instructions-panel">
+                        <div class="instructions-content">
+                            <h3>Slingshot Physics</h3>
+                            
+                            <div class="instruction-step">
+                                <div class="step-icon">1</div>
+                                <div class="step-text">Click and drag the red ball to create tension</div>
+                            </div>
+                            
+                            <div class="instruction-step">
+                                <div class="step-icon">2</div>
+                                <div class="step-text">Release to launch the ball</div>
+                            </div>
+                            
+                            <div class="instruction-step">
+                                <div class="step-icon">3</div>
+                                <div class="step-text">Watch how the small ball transfers momentum to the larger blue ball</div>
+                            </div>
+                            
+                            <div class="instruction-step">
+                                <div class="step-icon">4</div>
+                                <div class="step-text">Notice how both balls continue moving until acted upon by forces (gravity, friction, collisions)</div>
+                            </div>
+                        </div>
+                        
+                        <button class="reset-button" onclick="resetSimulation()">
+                            <i class="fas fa-redo-alt"></i> Reset Simulation
+                        </button>
+                    </div>
+                </div>
+
+                <div class="real-world-example">
+                    <h3>Real-World Applications</h3>
+                    <p>Newton's First Law explains why seatbelts are essential in vehicles. When a car suddenly stops, passengers continue moving forward due to inertia until acted upon by an external force (like a seatbelt).</p>
                 </div>
             </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-button home" onclick="goHome()">
+                <i class="fas fa-home"></i> Back to Home
+            </button>
+            <button class="nav-button" onclick="goToNextSimulation()">
+                Next: Second Law <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
     </div>
 
     <script>
+        // Variables for simulation
+        let bigX = 300, bigY = 200, bigVX = 0, bigVY = 0; // Large ball
+        let smallX, smallY, smallVX = 0, smallVY = 0; // Small ball
+        let dragging = false, launchX, launchY; // Slingshot controls
+        let gravity = 0.2, friction = 0.99, restitution = 0.7; // Physics parameters
+        let trailPoints = []; // For small ball trail
+        
+        function setup() {
+            // Create canvas within the simulation container
+            const simulationContainer = document.getElementById('first-law-simulation');
+            const canvasWidth = simulationContainer.offsetWidth;
+            const canvasHeight = simulationContainer.offsetHeight;
+            
+            const canvas = createCanvas(canvasWidth, canvasHeight);
+            canvas.parent('first-law-simulation');
+            
+            // Initialize positions
+            bigX = width / 2 + 50;
+            bigY = height / 2;
+            smallX = width / 4;
+            smallY = height - 50;
+            
+            // Set some styling for the canvas
+            document.querySelector('canvas').style.boxShadow = 'inset 0 0 10px rgba(0,0,0,0.1)';
+        }
+
+        function draw() {
+            // Create a nicer background with a grid
+            background(240);
+            drawGrid();
+            
+            // Apply gravity and friction
+            applyPhysics();
+            
+            // Handle collisions
+            handleCollisions();
+            
+            // Draw trail for small ball (shows motion path)
+            drawTrail();
+            
+            // Draw balls with nice styling
+            drawBalls();
+            
+            // Draw slingshot while dragging
+            if (dragging) {
+                drawSlingshot();
+            }
+            
+            // Display physics values
+            displayValues();
+        }
+        
+        function drawGrid() {
+            // Draw subtle grid
+            stroke(220);
+            strokeWeight(1);
+            
+            // Vertical lines
+            for (let x = 0; x < width; x += 50) {
+                line(x, 0, x, height);
+            }
+            
+            // Horizontal lines
+            for (let y = 0; y < height; y += 50) {
+                line(0, y, width, y);
+            }
+        }
+        
+        function applyPhysics() {
+            // Apply gravity
+            bigVY += gravity;
+            smallVY += gravity;
+            
+            // Apply friction
+            bigVX *= friction;
+            bigVY *= friction;
+            smallVX *= friction;
+            smallVY *= friction;
+            
+            // Apply motion
+            bigX += bigVX;
+            bigY += bigVY;
+            smallX += smallVX;
+            smallY += smallVY;
+            
+            // Add current position to trail (if moving)
+            if (abs(smallVX) > 0.5 || abs(smallVY) > 0.5) {
+                trailPoints.push({x: smallX, y: smallY});
+                
+                // Limit trail length
+                if (trailPoints.length > 15) {
+                    trailPoints.shift();
+                }
+            }
+        }
+        
+        function handleCollisions() {
+            // Ball Collision (Elastic)
+            let dx = bigX - smallX;
+            let dy = bigY - smallY;
+            let dist = sqrt(dx * dx + dy * dy);
+            let minDist = 35; // Radius sum
+            
+            if (dist < minDist) {
+                // Calculate collision angle
+                let angle = atan2(dy, dx);
+                
+                // Calculate velocity magnitudes
+                let smallSpeed = sqrt(smallVX * smallVX + smallVY * smallVY);
+                let smallAngle = atan2(smallVY, smallVX);
+                
+                // Transfer momentum with mass ratio considerations
+                let massRatio = 4; // Big ball is 4x heavier
+                
+                bigVX = (smallSpeed * cos(smallAngle - angle) / massRatio) * cos(angle);
+                bigVY = (smallSpeed * cos(smallAngle - angle) / massRatio) * sin(angle);
+                
+                // Adjust small ball velocity (with conservation of momentum)
+                smallVX = smallSpeed * sin(smallAngle - angle) * cos(angle + PI/2) - 
+                          (smallSpeed * cos(smallAngle - angle) * (1 - 1/massRatio)) * cos(angle);
+                smallVY = smallSpeed * sin(smallAngle - angle) * sin(angle + PI/2) - 
+                          (smallSpeed * cos(smallAngle - angle) * (1 - 1/massRatio)) * sin(angle);
+                
+                // Move balls apart to prevent sticking
+                let overlap = minDist - dist;
+                smallX -= overlap * cos(angle) * 0.5;
+                smallY -= overlap * sin(angle) * 0.5;
+                bigX += overlap * cos(angle) * 0.5;
+                bigY += overlap * sin(angle) * 0.5;
+            }
+            
+            // Boundary Collisions for Large Ball
+            if (bigX < 25) {
+                bigX = 25;
+                bigVX *= -restitution;
+            } else if (bigX > width - 25) {
+                bigX = width - 25;
+                bigVX *= -restitution;
+            }
+            
+            if (bigY < 25) {
+                bigY = 25;
+                bigVY *= -restitution;
+            } else if (bigY > height - 25) {
+                bigY = height - 25;
+                bigVY *= -restitution;
+                if (abs(bigVY) < 0.5) bigVY = 0;
+            }
+            
+            // Boundary Collisions for Small Ball
+            if (smallX < 10) {
+                smallX = 10;
+                smallVX *= -restitution;
+            } else if (smallX > width - 10) {
+                smallX = width - 10;
+                smallVX *= -restitution;
+            }
+            
+            if (smallY < 10) {
+                smallY = 10;
+                smallVY *= -restitution;
+            } else if (smallY > height - 10) {
+                smallY = height - 10;
+                smallVY *= -restitution;
+                if (abs(smallVY) < 0.5) smallVY = 0;
+            }
+        }
+        
+        function drawTrail() {
+            // Draw motion trail for small ball
+            noStroke();
+            for (let i = 0; i < trailPoints.length; i++) {
+                let alpha = map(i, 0, trailPoints.length, 10, 150);
+                let size = map(i, 0, trailPoints.length, 3, 10);
+                fill(255, 0, 0, alpha);
+                ellipse(trailPoints[i].x, trailPoints[i].y, size, size);
+            }
+        }
+        
+        function drawBalls() {
+            // Draw big ball with gradient and shadow
+            drawingContext.shadowBlur = 15;
+            drawingContext.shadowColor = 'rgba(0, 0, 0, 0.3)';
+            
+            // Big blue ball
+            let gradient = drawingContext.createRadialGradient(
+                bigX - 10, bigY - 10, 5,
+                bigX, bigY, 25
+            );
+            gradient.addColorStop(0, '#60a5fa');
+            gradient.addColorStop(1, '#3a86ff');
+            
+            drawingContext.fillStyle = gradient;
+            noStroke();
+            ellipse(bigX, bigY, 50, 50);
+            
+            // Add highlight
+            fill(255, 255, 255, 70);
+            ellipse(bigX - 10, bigY - 10, 15, 15);
+            
+            // Small red ball
+            let smallGradient = drawingContext.createRadialGradient(
+                smallX - 4, smallY - 4, 2,
+                smallX, smallY, 10
+            );
+            smallGradient.addColorStop(0, '#ff6b6b');
+            smallGradient.addColorStop(1, '#ff006e');
+            
+            drawingContext.fillStyle = smallGradient;
+            ellipse(smallX, smallY, 20, 20);
+            
+            // Add highlight
+            fill(255, 255, 255, 70);
+            ellipse(smallX - 3, smallY - 3, 6, 6);
+        }
+        
+        function drawSlingshot() {
+            // Draw slingshot line with dynamic tension
+            let distance = dist(launchX, launchY, mouseX, mouseY);
+            let tension = constrain(distance / 100, 0, 1);
+            
+            // Draw stretched rubber band effect
+            stroke(255, 100, 100, 150);
+            strokeWeight(3);
+            line(launchX, launchY, mouseX, mouseY);
+            
+            // Draw tension indicator
+            noStroke();
+            fill(255, 0, 0, 120);
+            let indicatorSize = map(tension, 0, 1, 10, 30);
+            ellipse(mouseX, mouseY, indicatorSize, indicatorSize);
+            
+            // Draw projected path (simplified)
+            stroke(200, 0, 0, 80);
+            strokeWeight(1);
+            let tmpX = smallX;
+            let tmpY = smallY;
+            let tmpVX = (launchX - mouseX) * 0.2;
+            let tmpVY = (launchY - mouseY) * 0.2;
+            
+            beginShape();
+            noFill();
+            vertex(smallX, smallY);
+            
+            for (let i = 0; i < 10; i++) {
+                tmpVY += gravity;
+                tmpX += tmpVX;
+                tmpY += tmpVY;
+                vertex(tmpX, tmpY);
+                
+                // Stop if hitting boundary
+                if (tmpX < 0 || tmpX > width || tmpY > height) {
+                    break;
+                }
+            }
+            endShape();
+        }
+        
+        function displayValues() {
+            // Display speed values for educational purposes
+            fill(80);
+            noStroke();
+            textSize(12);
+            textAlign(CENTER);
+            
+            // Small ball velocity
+            text(`Speed: ${nf(sqrt(smallVX*smallVX + smallVY*smallVY), 1, 1)}`, smallX, smallY + 25);
+            
+            // Big ball velocity 
+            text(`Speed: ${nf(sqrt(bigVX*bigVX + bigVY*bigVY), 1, 1)}`, bigX, bigY + 35);
+        }
+        
+        function mousePressed() {
+            // Start dragging the small ball for slingshot
+            if (dist(mouseX, mouseY, smallX, smallY) < 15) {
+                dragging = true;
+                launchX = smallX;
+                launchY = smallY;
+                smallVX = 0;
+                smallVY = 0;
+            }
+        }
+        
+        function mouseDragged() {
+            // Update small ball position while dragging
+            if (dragging) {
+                smallX = mouseX;
+                smallY = mouseY;
+            }
+        }
+        
+        function mouseReleased() {
+            // Launch the small ball
+            if (dragging) {
+                smallVX = (launchX - mouseX) * 0.2;
+                smallVY = (launchY - mouseY) * 0.2;
+                dragging = false;
+                
+                // Clear trail on new launch
+                trailPoints = [];
+            }
+        }
+        
+        function resetSimulation() {
+            // Reset all simulation values
+            bigX = width / 2 + 50;
+            bigY = height / 2;
+            smallX = width / 4;
+            smallY = height - 50;
+            bigVX = 0;
+            bigVY = 0;
+            smallVX = 0;
+            smallVY = 0;
+            dragging = false;
+            trailPoints = [];
+        }
+        
+        function windowResized() {
+            // Handle window resizing
+            const simulationContainer = document.getElementById('first-law-simulation');
+            resizeCanvas(simulationContainer.offsetWidth, simulationContainer.offsetHeight);
+            
+            // Adjust positions
+            if (bigX > width) bigX = width / 2;
+            if (bigY > height) bigY = height / 2;
+            if (smallX > width) smallX = width / 4;
+            if (smallY > height) smallY = height - 50;
+        }
+        
         function goToNextSimulation() {
             window.location.href = 'newtons_secondlaw.html';
         }
+        
         function goHome() {
             window.location.href = 'index.html';
         }
     </script>
-
-    <!-- p5.js Simulation for First Law -->
-    <script>
-        let bigX = 300, bigY = 200, bigVX = 0, bigVY = 0; // Large ball
-        let smallX, smallY, smallVX = 0, smallVY = 0; // Small ball
-        let dragging = false, launchX, launchY; // Slingshot controls
-        let gravity = 0.2, friction = 0.99, restitution = 0.6; // Restitution is bounce efficiency
-
-        function setup() {
-            const canvas = createCanvas(600, 400);
-            canvas.parent('first-law-simulation'); // Attach to the simulation div
-            smallX = width / 4;
-            smallY = height - 50;
-        }
-
-        function draw() {
-            background(220);
-
-            // Apply gravity to both balls
-            bigVY += gravity;
-            smallVY += gravity;
-
-            // Apply motion & friction to large ball
-            bigVX *= friction;
-            bigVY *= friction;
-            bigX += bigVX;
-            bigY += bigVY;
-
-            // Apply motion to small ball
-            smallX += smallVX;
-            smallY += smallVY;
-            smallVX *= friction;
-            smallVY *= friction;
-
-            // Ball Collision Detection (Basic Elastic Collision)
-            let dx = bigX - smallX;
-            let dy = bigY - smallY;
-            let dist = sqrt(dx * dx + dy * dy);
-
-            if (dist < 50) { // If the small ball hits the big ball
-                let angle = atan2(dy, dx);
-                let speed = sqrt(smallVX * smallVX + smallVY * smallVY);
-
-                bigVX = speed * cos(angle);
-                bigVY = speed * sin(angle);
-
-                smallVX = -bigVX * 0.5; // Reverse small ball speed
-                smallVY = -bigVY * 0.5;
-            }
-
-            // **Boundary Collision for Large Ball**
-            if (bigX < 25 || bigX > width - 25) {
-                bigVX *= -1;
-                bigX = constrain(bigX, 25, width - 25);
-            }
-            if (bigY > height - 25) { // Hits ground
-                bigVY *= -restitution;
-                bigY = height - 25;
-                if (abs(bigVY) < 0.5) bigVY = 0; // Stop bouncing when very slow
-            }
-
-            // **Boundary Collision for Small Ball**
-            if (smallX < 10 || smallX > width - 10) {
-                smallVX *= -1;
-                smallX = constrain(smallX, 10, width - 10);
-            }
-            if (smallY > height - 10) { // Hits ground
-                smallVY *= -restitution;
-                smallY = height - 10;
-                if (abs(smallVY) < 0.5) smallVY = 0; // Stop bouncing when very slow
-            }
-
-            // Draw Large Ball with Gradient and Shadow
-            drawBall(bigX, bigY, 50, color(0, 100, 255), color(0, 50, 200));
-
-            // Draw Small Ball with Gradient and Shadow
-            drawBall(smallX, smallY, 20, color(255, 0, 0), color(200, 0, 0));
-
-            // Draw Slingshot Line (while dragging)
-            if (dragging) {
-                stroke(0);
-                line(launchX, launchY, mouseX, mouseY);
-            }
-        }
-
-        // Function to draw a ball with gradient and shadow
-        function drawBall(x, y, size, color1, color2) {
-            // Shadow
-            drawingContext.shadowBlur = 10;
-            drawingContext.shadowColor = color(0, 0, 0, 100);
-
-            // Gradient Fill
-            let gradient = drawingContext.createRadialGradient(
-                x, y, size * 0.2, x, y, size
-            );
-            gradient.addColorStop(0, color1.toString());
-            gradient.addColorStop(1, color2.toString());
-            drawingContext.fillStyle = gradient;
-
-            // Draw Ball
-            noStroke();
-            ellipse(x, y, size, size);
-        }
-
-        // Start Dragging for Slingshot
-        function mousePressed() {
-            if (dist(mouseX, mouseY, smallX, smallY) < 10) {
-                dragging = true;
-                launchX = mouseX;
-                launchY = mouseY;
-            }
-        }
-
-        // Release to Fire the Small Ball
-        function mouseReleased() {
-            if (dragging) {
-                smallVX = (launchX - mouseX) * 0.2; // Launch force
-                smallVY = (launchY - mouseY) * 0.2;
-                dragging = false;
-            }
-        }
-    </script>
-    <div class="button-group">
-        <button onclick="goHome()">Back to Home</button>
-        <button onclick="goToNextSimulation()">Next Simulation →</button>
-    </div>
 </body>
 
 </html>
