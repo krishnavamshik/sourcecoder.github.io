@@ -107,9 +107,11 @@
             0% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.05);
             }
+
             100% {
                 transform: scale(1);
             }
@@ -325,16 +327,16 @@
             h1 {
                 font-size: 2rem;
             }
-            
+
             .section-header h2 {
                 font-size: 1.5rem;
             }
-            
+
             .navigation {
                 flex-direction: column;
                 gap: 1rem;
             }
-            
+
             .nav-button {
                 width: 100%;
                 justify-content: center;
@@ -378,7 +380,9 @@
 
     <div class="container">
         <div class="intro">
-            <p>Thank you for exploring GEA's interactive physics simulations! We're just getting started, and we'd love your input on what topics we should tackle next. Vote for your favorites, share your feedback, and sign up for updates!</p>
+            <p>Thank you for exploring GEA's interactive physics simulations! We're just getting started, and we'd love
+                your input on what topics we should tackle next. Vote for your favorites, share your feedback, and sign
+                up for updates!</p>
         </div>
 
         <div class="content-section">
@@ -393,7 +397,8 @@
                         </div>
                         <div class="topic-info">
                             <div class="topic-title">AI-Powered Learning Roadmap Generator</div>
-                            <div class="topic-description">Provide learners with a personalized roadmap based on their learning goals.</div>
+                            <div class="topic-description">Provide learners with a personalized roadmap based on their
+                                learning goals.</div>
                         </div>
                     </li>
                     <li class="topic-item">
@@ -402,7 +407,8 @@
                         </div>
                         <div class="topic-info">
                             <div class="topic-title">Learning Progress Tracking</div>
-                            <div class="topic-description">Custom model to monitor progress and adjust learning paths of learner dynamically.</div>
+                            <div class="topic-description">Custom model to monitor progress and adjust learning paths of
+                                learner dynamically.</div>
                         </div>
                     </li>
                     <li class="topic-item">
@@ -411,7 +417,8 @@
                         </div>
                         <div class="topic-info">
                             <div class="topic-title">Topic Recommendation</div>
-                            <div class="topic-description"> Recommend next topics based on learner's progress and understanding.</div>
+                            <div class="topic-description"> Recommend next topics based on learner's progress and
+                                understanding.</div>
                         </div>
                     </li>
                     <li class="topic-item">
@@ -429,7 +436,8 @@
                         </div>
                         <div class="topic-info">
                             <div class="topic-title">Validate Your Learning</div>
-                            <div class="topic-description">Verify learners have truly understood a topic before moving forward.</div>
+                            <div class="topic-description">Verify learners have truly understood a topic before moving
+                                forward.</div>
                         </div>
                     </li>
                     <li class="topic-item">
@@ -468,13 +476,17 @@
 
                     <div class="form-group">
                         <label class="form-label">Share Your Feedback</label>
-                        <textarea class="form-control" id="feedback" placeholder="What did you like about our simulations? Any suggestions for improvement? Other topics you'd like to see?" required></textarea>
+                        <textarea class="form-control" id="feedback"
+                            placeholder="What did you like about our simulations? Any suggestions for improvement? Other topics you'd like to see?"
+                            required></textarea>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Email for Updates</label>
-                        <input type="email" class="form-control" id="email" placeholder="your.email@example.com" required>
-                        <p class="email-info">We'll notify you when new simulations are released and when your requested topics are available.</p>
+                        <input type="email" class="form-control" id="email" placeholder="your.email@example.com"
+                            required>
+                        <p class="email-info">We'll notify you when new simulations are released and when your requested
+                            topics are available.</p>
                     </div>
 
                     <button type="submit" class="submit-btn">
@@ -482,7 +494,8 @@
                     </button>
 
                     <div id="thank-you" class="thank-you">
-                        <p><strong>Thank you for your feedback!</strong> We've received your input and will take it into consideration for our upcoming releases.</p>
+                        <p><strong>Thank you for your feedback!</strong> We've received your input and will take it into
+                            consideration for our upcoming releases.</p>
                     </div>
                 </form>
             </div>
@@ -501,24 +514,40 @@
     <script>
         function submitForm(event) {
             event.preventDefault();
-            
-            // In a real implementation, this would send the form data to a server
-            // For demo purposes, we'll just show a thank you message
-            document.getElementById('thank-you').style.display = 'block';
-            
-            // Scroll to the thank you message
-            document.getElementById('thank-you').scrollIntoView({ behavior: 'smooth' });
-            
-            // Reset form after a delay
-            setTimeout(() => {
-                document.getElementById('feedback-form').reset();
-            }, 2000);
+
+            const email = document.getElementById('email').value;
+            const topicVote = document.getElementById('topic-vote').value;
+            const feedback = document.getElementById('feedback').value;
+
+            fetch('/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    topic_vote: topicVote,
+                    feedback: feedback,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('thank-you').style.display = 'block';
+                    document.getElementById('thank-you').scrollIntoView({ behavior: 'smooth' });
+                    setTimeout(() => {
+                        document.getElementById('feedback-form').reset();
+                    }, 2000);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to submit feedback. Please try again.');
+                });
         }
-        
+
         function goHome() {
             window.location.href = 'index.html';
         }
-        
+
         function goToFirstLaw() {
             window.location.href = 'early-access.html';
         }
