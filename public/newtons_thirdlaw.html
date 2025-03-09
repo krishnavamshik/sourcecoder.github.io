@@ -4,389 +4,717 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEA Early Access - Learn Newton's Third Law</title>
+    <title>GEA - Newton's Third Law of Motion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
     <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --primary: #3a86ff;
+            --secondary: #8338ec;
+            --accent: #ff006e;
+            --light: #ffffff;
+            --dark: #1a1a2e;
+            --gray: #f8f9fa;
+            --text: #333333;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(to right, #f7f7f7, #e3e3e3);
-            color: #333;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--gray) 0%, #e9ecef 100%);
+            color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2rem 0;
         }
 
-        h1,
-        h2 {
-            color: #4A90E2;
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0.6;
+            z-index: 0;
+            transform: rotate(30deg);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 2.8rem;
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
         }
 
-        h2 {
-            font-size: 2em;
-            margin-top: 30px;
-            margin-bottom: 10px;
+        .tag-line {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0.9;
         }
 
-        p {
-            font-size: 1.1em;
-            margin-bottom: 20px;
+        .early-access-badge {
+            background-color: var(--accent);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2.5rem;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .intro p {
+            font-size: 1.1rem;
+            margin-bottom: 0;
         }
 
         .law-section {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .law-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .law-header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .law-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: white;
+        }
+
+        .law-content {
+            padding: 2rem;
+        }
+
+        .law-description {
+            margin-bottom: 2rem;
+        }
+
+        .law-description p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .law-description p strong {
+            color: var(--primary);
+        }
+
+        .key-idea {
+            background-color: rgba(58, 134, 255, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .formula-box {
+            background-color: rgba(131, 56, 236, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 5px 5px 0;
+            text-align: center;
+        }
+
+        .formula-box p {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--secondary);
         }
 
         .simulation-container {
             display: flex;
-            align-items: flex-start;
-            gap: 20px;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .simulation-container {
+                flex-direction: row;
+                align-items: stretch;
+            }
+        }
+
+        .simulation-wrapper {
+            flex: 7;
+            background: var(--gray);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
         }
 
         .simulation-placeholder {
-            background: #f9f9f9;
-            border: 1px dashed #ccc;
-            padding: 10px;
-            text-align: center;
-            border-radius: 5px;
+            width: 100%;
             height: 450px;
-            width: 70%;
-            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
         }
 
-        .simulation-instructions {
-            width: 30%;
-            background: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .simulation-placeholder canvas {
+            display: block;
+            border-radius: 10px;
         }
 
-        .simulation-controls {
-            margin-top: 20px;
+        .instructions-panel {
+            flex: 3;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .simulation-controls label {
-            font-weight: bold;
-            margin-bottom: 5px;
+        .instructions-content h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
 
-        .simulation-controls input {
-            width: 100px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .simulation-controls button {
-            padding: 8px 15px;
-            font-size: 0.9em;
-            cursor: pointer;
-            background: #4A90E2;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .simulation-controls button:hover {
-            background: #3A80D2;
-            transform: scale(1.05);
-        }
-
-        .simulation-controls .launch-button {
-            background: #FF5722;
-            font-weight: bold;
-        }
-
-        .simulation-controls .launch-button:hover {
-            background: #E64A19;
-        }
-
-        .button-group {
-            margin-top: 20px;
+        .instruction-step {
             display: flex;
-            justify-content: center;
-            gap: 600px;
+            align-items: flex-start;
+            margin-bottom: 1rem;
         }
 
-        .button-group button {
-            padding: 10px 20px;
-            background: #4A90E2;
+        .step-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+            font-size: 0.8rem;
+        }
+
+        .step-text {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        .control-field {
+            margin-bottom: 1rem;
+        }
+
+        .control-field label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .control-field input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .control-field input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.2);
+        }
+
+        .control-field input[readonly] {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .control-button {
+            flex: 1;
+            background-color: var(--primary);
             color: white;
             border: none;
+            padding: 0.8rem 1rem;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1em;
-            transition: all 0.3s ease;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .button-group button:hover {
-            background: #3A80D2;
-            transform: scale(1.05);
+        .control-button:hover {
+            background-color: #2a75e6;
+            transform: translateY(-2px);
         }
 
-        /* New styles for enhanced features */
-        .force-visualizer {
-            height: 30px;
-            width: 100%;
-            background: #eee;
+        .control-button i {
+            margin-right: 8px;
+        }
+
+        .control-button.reset {
+            background-color: var(--dark);
+        }
+
+        .control-button.reset:hover {
+            background-color: #262639;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
             border-radius: 5px;
-            margin-top: 10px;
-            overflow: hidden;
-            position: relative;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .nav-button.home {
+            background-color: var(--dark);
+        }
+
+        .nav-button.home:hover {
+            background-color: #262639;
+        }
+
+        .nav-button i {
+            margin: 0 8px;
+        }
+
+        .real-world-example {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border: 1px dashed #dee2e6;
+        }
+
+        .real-world-example h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Slider styling */
+        .slider-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: var(--secondary);
+        }
+
+        .slider-value {
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Force Bar Styling */
+        .force-bar-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .force-bar-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .force-bar-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .force-bar {
+            flex: 1;
+            height: 8px;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .force-bar div {
             height: 100%;
-            width: 0%;
-            background: linear-gradient(to right, #4CAF50, #FFEB3B, #FF5722);
+            background: var(--primary);
             transition: width 0.3s ease;
         }
 
         .force-label {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: bold;
-            color: #333;
-        }
-
-        .fuel-gauge {
-            height: 15px;
-            width: 100%;
-            background: #eee;
-            border-radius: 10px;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-
-        .fuel-level {
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(to right, #FF5722, #FFEB3B, #4CAF50);
-            transition: width 0.5s ease;
-        }
-
-        .mission-status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
+            width: 50px;
             text-align: center;
-            background: #E0E0E0;
+            font-weight: bold;
+            color: var(--primary);
         }
 
-        .telemetry {
-            margin-top: 15px;
-            font-size: 0.9em;
-        }
-
-        .telemetry-item {
+        /* Analytics panel */
+        .analytics-panel {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .telemetry-value {
-            font-weight: bold;
-        }
-
-        /* Badges and achievements */
-        .badges {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            justify-content: center;
-        }
-
-        .badge {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #E0E0E0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            opacity: 0.3;
-            transition: all 0.3s ease;
-            cursor: help;
-        }
-
-        .badge.earned {
-            opacity: 1;
-            background: #4CAF50;
-            color: white;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* Tooltip for badges */
-        .badge-tooltip {
-            position: relative;
-        }
-
-        .badge-tooltip .tooltip-text {
-            visibility: hidden;
-            width: 120px;
-            background-color: #555;
-            color: #fff;
+        .analytics-card {
+            flex: 1;
             text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 12px;
+            padding: 1rem;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
         }
 
-        .badge-tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
+        .analytics-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .analytics-card:not(:last-child) {
+            margin-right: 1rem;
+        }
+
+        .analytics-card h4 {
+            color: var(--dark);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-unit {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        @media (max-width: 767px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .law-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .simulation-placeholder {
+                height: 350px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .analytics-panel {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .analytics-card:not(:last-child) {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
         }
     </style>
 </head>
 
 <body>
+    <header>
+        <div class="header-content">
+            <h1>Newton's Laws of Motion</h1>
+            <p class="tag-line">Interactive Physics Simulations</p>
+            <div class="early-access-badge">Early Access</div>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>Learn Newton's Laws of Motion</h1>
-        <p>Welcome to GEA's Early Access! Here, you'll explore <strong>Newton's Laws of Motion</strong>—the foundation
-            of physics. These laws explain how objects move and interact with forces. Let's dive in and learn through
-            interactive simulations!</p>
+        <div class="intro">
+            <p>Welcome to GEA's Early Access! 🚀 Experience Newton's Laws of Motion through interactive simulations that
+                make physics intuitive and engaging. Discover how forces shape movement and see science in action.</p>
+        </div>
 
-        <!-- Third Law Section -->
         <div class="law-section">
-            <h2>Third Law: The Law of Action and Reaction</h2>
-            <p><strong>"For every action, there is an equal and opposite reaction."</strong></p>
-            <p><strong>What does this mean?</strong> When you push against a wall, the wall pushes back with an equal force. Similarly, when a rocket expels gas downward, the gas pushes the rocket upward with an equal force.</p>
-            <p><strong>Key Idea:</strong> Forces always come in pairs—equal in magnitude and opposite in direction.</p>
+            <div class="law-header">
+                <h2>Third Law: The Law of Action and Reaction</h2>
+            </div>
+            <div class="law-content">
+                <div class="law-description">
+                    <p><strong>"For every action, there is an equal and opposite reaction."</strong></p>
+                    <p>This law explains why when you push against a wall, the wall pushes back with an equal force.
+                        Similarly, when a rocket expels gas downward, the gas pushes the rocket upward with an equal
+                        force.</p>
 
-            <!-- Simulation Container -->
-            <div class="simulation-container">
-                <!-- Simulation Placeholder -->
-                <div id="third-law-simulation" class="simulation-placeholder">
-
+                    <div class="key-idea">
+                        <p><strong>Key Idea:</strong> Forces always come in pairs—equal in magnitude and opposite in
+                            direction.</p>
+                    </div>
                 </div>
 
-                <!-- Instructions -->
-                <div class="simulation-instructions">
-                    <p><strong>🚀 Space Mission Simulator</strong></p>
-                    <p>Adjust the rocket mass and thrust to complete your mission!</p>
-                    <p>Watch how Newton's Third Law propels your rocket upward.</p>
-
-                    <div class="mission-status">MISSION: READY FOR LAUNCH</div>
-
-                    <!-- Input Fields -->
-                    <div class="simulation-controls">
-                        <label for="massInput">Rocket Mass (kg)</label>
-                        <input type="range" id="massInput" min="50" max="500" value="200" step="10">
-                        <span id="massValue">200 kg</span>
-
-                        <label for="forceInput">Rocket Thrust (N)</label>
-                        <input type="range" id="forceInput" min="0" max="10000" value="2000" step="100">
-                        <span id="forceValue">2000 N</span>
-
-                        <div class="force-visualizer">
-                            <div class="force-bar" id="forceBar"></div>
-                            <div class="force-label" id="forceLabel">0%</div>
-                        </div>
-
-                        <label>Fuel Level</label>
-                        <div class="fuel-gauge">
-                            <div class="fuel-level" id="fuelLevel"></div>
-                        </div>
-
-                        <button id="launchButton" class="launch-button">LAUNCH MISSION 🚀</button>
-                        <button id="resetButton">ABORT & RESET 🔄</button>
-                    </div>
-
-                    <!-- Telemetry Data -->
-                    <div class="telemetry">
-                        <div class="telemetry-item">
-                            <span>Acceleration:</span>
-                            <span class="telemetry-value" id="accelerationDisplay">0 m/s²</span>
-                        </div>
-                        <div class="telemetry-item">
-                            <span>Altitude:</span>
-                            <span class="telemetry-value" id="altitudeDisplay">0 m</span>
-                        </div>
-                        <div class="telemetry-item">
-                            <span>Speed:</span>
-                            <span class="telemetry-value" id="velocityDisplay">0 m/s</span>
+                <div class="simulation-container">
+                    <div class="simulation-wrapper">
+                        <div id="third-law-simulation" class="simulation-placeholder">
+                            <!-- p5.js canvas will be placed here -->
                         </div>
                     </div>
 
-                    <!-- Achievement Badges -->
-                    <div class="badges">
-                        <div class="badge badge-tooltip" id="badge1" title="First Launch">
-                            🚀
-                            <span class="tooltip-text">First Launch</span>
+                    <div class="instructions-panel">
+                        <div class="instructions-content">
+                            <h3>Rocket Launch Simulator</h3>
+
+                            <div class="instruction-step">
+                                <div class="step-icon">1</div>
+                                <div class="step-text">Adjust the mass of the rocket using the slider</div>
+                            </div>
+
+                            <div class="instruction-step">
+                                <div class="step-icon">2</div>
+                                <div class="step-text">Set the thrust force to apply to the rocket</div>
+                            </div>
+
+                            <div class="instruction-step">
+                                <div class="step-icon">3</div>
+                                <div class="step-text">Press "Launch Mission" to see Newton's Third Law in action!</div>
+                            </div>
+
+                            <div class="slider-container">
+                                <label for="massSlider">Mass (kg):</label>
+                                <div class="slider-wrapper">
+                                    <input type="range" min="50" max="500" value="200" class="slider" id="massSlider">
+                                    <span class="slider-value" id="massValue">200</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <label for="forceSlider">Thrust (N):</label>
+                                <div class="slider-wrapper">
+                                    <input type="range" min="0" max="10000" value="2000" class="slider"
+                                        id="forceSlider">
+                                    <span class="slider-value" id="forceValue">2000</span>
+                                </div>
+                            </div>
+
+                            <!-- Force Bar and Label -->
+                            <div class="force-bar-container">
+                                <label for="forceBar">Thrust Level:</label>
+                                <div class="force-bar-wrapper">
+                                    <div id="forceBar" class="force-bar"></div>
+                                    <span id="forceLabel" class="force-label">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="control-field">
+                                <label for="accelerationDisplay">Acceleration (m/s²):</label>
+                                <input type="text" id="accelerationDisplay" value="0" readonly>
+                            </div>
                         </div>
-                        <div class="badge badge-tooltip" id="badge2" title="Escape Velocity">
-                            🌍
-                            <span class="tooltip-text">Escape Velocity</span>
-                        </div>
-                        <div class="badge badge-tooltip" id="badge3" title="Space Explorer">
-                            🌠
-                            <span class="tooltip-text">Space Explorer</span>
+
+                        <div class="control-buttons">
+                            <button class="control-button" id="launchButton">
+                                <i class="fas fa-rocket"></i> Launch Mission
+                            </button>
+                            <button class="control-button reset" id="resetButton">
+                                <i class="fas fa-redo-alt"></i> Reset
+                            </button>
                         </div>
                     </div>
+                </div>
+
+                <div class="analytics-panel">
+                    <div class="analytics-card">
+                        <h4>Altitude</h4>
+                        <div class="analytics-value" id="altitudeValue">0</div>
+                        <div class="analytics-unit">meters</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Velocity</h4>
+                        <div class="analytics-value" id="velocityValue">0</div>
+                        <div class="analytics-unit">m/s</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Acceleration</h4>
+                        <div class="analytics-value" id="accelValue">0</div>
+                        <div class="analytics-unit">m/s²</div>
+                    </div>
+                </div>
+
+                <div class="real-world-example">
+                    <h3>Real-World Applications</h3>
+                    <p>Newton's Third Law is essential in countless real-world scenarios:</p>
+                    <p>• Rockets use this principle to propel themselves by expelling gas downward, which creates an
+                        upward thrust.</p>
+                    <p>• Jet engines work similarly, expelling air backward to move the plane forward.</p>
+                    <p>• When you walk, your foot pushes backward on the ground, and the ground pushes you forward.</p>
+                    <p>• Even swimming relies on this law—you push water backward, and the water pushes you forward.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Centered Buttons -->
-        <div class="button-group">
-            <button onclick="goToPrevious()">Back to Previous</button>
-            <button onclick="goToNextSimulation()">Completed!!</button>
+        <div class="navigation">
+            <button class="nav-button home" onclick="goHome()">
+                <i class="fas fa-home"></i> Back to Home
+            </button>
+            <button class="nav-button" onclick="goToNextSimulation()">
+                Next: Completed <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
     </div>
 
     <script>
-        function goToNextSimulation() {
-            window.location.href = 'completed.html';
-        }
-        function goToPrevious() {
-            window.location.href = 'newtons_secondlaw.html';
-        }
-    </script>
-
-    <!-- p5.js Simulation for Third Law -->
-    <script>
+        // Variables for simulation
         let rocketY;
         let velocity = 0;
         let acceleration = 0;
@@ -413,76 +741,132 @@
         };
         // Random color options for rocket customization
         let colorOptions = ["#FF5722", "#2196F3", "#4CAF50", "#9C27B0", "#FFEB3B"];
-
         function setup() {
             const canvas = createCanvas(600, 450);
-            canvas.parent('third-law-simulation'); // Attach to the simulation div
+            canvas.parent('third-law-simulation');
 
             rocketY = height - 100;  // Rocket starts on ground
 
             // Get HTML elements
-            massInput = document.getElementById('massInput');
-            forceInput = document.getElementById('forceInput');
+            massInput = document.getElementById('massSlider');
+            forceInput = document.getElementById('forceSlider');
             massValue = document.getElementById('massValue');
             forceValue = document.getElementById('forceValue');
             accelerationDisplay = document.getElementById('accelerationDisplay');
-            altitudeDisplay = document.getElementById('altitudeDisplay');
-            velocityDisplay = document.getElementById('velocityDisplay');
+            altitudeDisplay = document.getElementById('altitudeValue');
+            velocityDisplay = document.getElementById('velocityValue');
+            accelValue = document.getElementById('accelValue');
             launchButton = document.getElementById('launchButton');
             resetButton = document.getElementById('resetButton');
             missionStatus = document.querySelector('.mission-status');
             forceBar = document.getElementById('forceBar');
             forceLabel = document.getElementById('forceLabel');
             fuelLevel = document.getElementById('fuelLevel');
+
+            // **Ensure achievement badges exist**
             badge1 = document.getElementById('badge1');
             badge2 = document.getElementById('badge2');
             badge3 = document.getElementById('badge3');
 
+            // **Avoid undefined errors**
+            if (!badge1 || !badge2 || !badge3) {
+                console.warn("Achievement badges not found. Skipping achievement updates.");
+            }
+
             // Set up event listeners
-            massInput.addEventListener('input', updateMassValue);
-            forceInput.addEventListener('input', updateForceValue);
-            launchButton.addEventListener('click', launchRocket);
-            resetButton.addEventListener('click', resetRocket);
+            if (massInput) massInput.addEventListener('input', updateMassValue);
+            if (forceInput) forceInput.addEventListener('input', updateForceValue);
+            if (launchButton) launchButton.addEventListener('click', launchRocket);
+            if (resetButton) resetButton.addEventListener('click', resetRocket);
 
-            // Initialize stars
-            for (let i = 0; i < 100; i++) {
-                stars.push({
-                    x: random(width),
-                    y: random(height/2),
-                    size: random(1, 3),
-                    twinkle: random(0.5, 1.5)
-                });
-            }
-
-            // Initialize clouds
-            for (let i = 0; i < 5; i++) {
-                clouds.push({
-                    x: random(width),
-                    y: random(height/2, height-100),
-                    size: random(40, 80),
-                    speed: random(0.2, 0.5)
-                });
-            }
-
-            // Initial UI updates
             updateMassValue();
             updateForceValue();
         }
 
+        function updateSimulation() {
+            if (fuel > 0) {
+                fuel -= 0.2; // Consume fuel
+
+                // Create exhaust particles
+                if (frameCount % 2 === 0) {
+                    particles.push(new Particle(300, rocketY + 60, fuel / 100));
+                }
+
+                // Calculate acceleration based on remaining fuel
+                let thrust = parseFloat(forceInput.value); // Thrust force in Newtons
+                let mass = parseFloat(massInput.value);   // Mass in kg
+                acceleration =  (thrust / mass) * (fuel / 100); // Acceleration = Force / Mass
+            } else {
+                acceleration = 0; // No thrust when out of fuel
+            }
+
+            // Apply gravity (simplified)
+            acceleration -= 9.8; // Earth's gravity (m/s²)
+
+            // Update velocity
+            velocity += acceleration * 0.1; // Scale for better visualization
+
+            // Update position
+            let prevY = rocketY;
+            rocketY -= velocity; // Move the rocket upward (negative Y direction)
+
+            // Update altitude
+            altitude += (prevY - rocketY) * 10; // Scale for better display
+            if (altitude < 0) altitude = 0;
+
+            // Track max altitude
+            if (altitude > maxAltitude) {
+                maxAltitude = altitude;
+            }
+
+            // Update background gradient based on altitude
+            backgroundGradient = constrain(map(altitude, 0, 10000, 0, 1), 0, 1);
+
+            // Update telemetry displays
+            if (accelerationDisplay) accelerationDisplay.value = acceleration.toFixed(1);
+            if (altitudeDisplay) altitudeDisplay.textContent = Math.round(altitude);
+            if (velocityDisplay) velocityDisplay.textContent = Math.abs(velocity).toFixed(1);
+            
+
+            // Check for achievements
+            checkAchievements();
+
+            // Handle rocket going out of viewport
+            if (rocketY < -100) {
+                if (missionStatus) {
+                    missionStatus.textContent = "MISSION: LEFT ATMOSPHERE";
+                    missionStatus.style.background = "#4CAF50";
+                }
+                achievements.spaceExplorer = true;
+                updateAchievements();
+            }
+
+            // Detect crash landing (negative velocity but back on ground)
+            if (rocketY >= height - 100 && velocity < 0) {
+                rocketY = height - 100;
+                velocity = 0;
+                acceleration = 0;
+                if (missionStatus) {
+                    missionStatus.textContent = "MISSION: CRASHED";
+                    missionStatus.style.background = "#F44336";
+                }
+                launched = false;
+            }
+        }
         function draw() {
             // Background gradient from Earth to space
             setGradientBackground();
-            
+
             // Draw stars if in space
             if (backgroundGradient > 0.3) {
                 drawStars();
             }
-            
+
             // Draw clouds if near Earth
             if (backgroundGradient < 0.7) {
                 drawClouds();
             }
-            
+
             // Draw Earth curve
             drawEarth();
 
@@ -490,27 +874,29 @@
             if (launched) {
                 drawForceVectors();
             }
-            
+
             // Draw particles (exhaust)
             drawParticles();
-            
+
             // Draw rocket
             drawRocket();
-            
+
             // Update simulation if launched
             if (launched) {
                 updateSimulation();
             }
-            
+
             // Visual effect for rocket flame
             rocketFlame = sin(frameCount * 0.2) * 10;
         }
+
+
 
         function setGradientBackground() {
             // Earth to space transition
             let earthColor = color(135, 206, 235); // Sky blue
             let spaceColor = color(20, 24, 82); // Deep space blue
-            
+
             // Create gradient background based on altitude
             for (let y = 0; y < height; y++) {
                 let inter = map(y, 0, height, 0, 1);
@@ -533,15 +919,15 @@
         function drawClouds() {
             noStroke();
             fill(255, 255, 255, 255 * (0.7 - backgroundGradient > 0 ? 0.7 - backgroundGradient : 0) * 1.4);
-            
+
             for (let cloud of clouds) {
                 // Move clouds
                 cloud.x -= cloud.speed;
                 if (cloud.x < -cloud.size) {
                     cloud.x = width + cloud.size;
-                    cloud.y = random(height/2, height-100);
+                    cloud.y = random(height / 2, height - 100);
                 }
-                
+
                 // Draw cloud
                 ellipse(cloud.x, cloud.y, cloud.size, cloud.size * 0.6);
                 ellipse(cloud.x + cloud.size * 0.4, cloud.y - cloud.size * 0.1, cloud.size * 0.8, cloud.size * 0.5);
@@ -553,10 +939,10 @@
             // Draw Earth's curve at the bottom
             noStroke();
             fill(34, 139, 34); // Forest green
-            
+
             // Earth curve gets smaller as we go higher
             let curve = map(backgroundGradient, 0, 1, height - 50, height + earthRadius);
-            ellipse(width/2, curve + earthRadius, earthRadius * 6, earthRadius * 4);
+            ellipse(width / 2, curve + earthRadius, earthRadius * 6, earthRadius * 4);
         }
 
         function drawForceVectors() {
@@ -565,41 +951,42 @@
                 stroke(255, 100, 0);
                 strokeWeight(3);
                 let arrowLength = map(acceleration, 0, 50, 0, 40);
-                
+
                 // Main arrow line
                 line(300, rocketY + 70, 300, rocketY + 70 + arrowLength);
-                
+
                 // Arrow head
                 line(300, rocketY + 70 + arrowLength, 295, rocketY + 70 + arrowLength - 5);
                 line(300, rocketY + 70 + arrowLength, 305, rocketY + 70 + arrowLength - 5);
-                
+
                 // Draw reaction force (upward arrow)
                 stroke(0, 100, 255);
-                
+
                 // Main arrow line
                 line(300, rocketY + 70, 300, rocketY + 70 - arrowLength);
-                
+
                 // Arrow head
                 line(300, rocketY + 70 - arrowLength, 295, rocketY + 70 - arrowLength + 5);
                 line(300, rocketY + 70 - arrowLength, 305, rocketY + 70 - arrowLength + 5);
-                
+
                 // Reset stroke weight
                 strokeWeight(1);
-                
+
                 // Label the forces
                 textSize(14);
                 textAlign(LEFT);
                 fill(255, 100, 0);
-                text("Action Force", 310, rocketY + 70 + arrowLength/2);
+                text("Action Force", 310, rocketY + 70 + arrowLength / 2);
                 fill(0, 100, 255);
-                text("Reaction Force", 310, rocketY + 70 - arrowLength/2);
+                text("Reaction Force", 310, rocketY + 70 - arrowLength / 2);
             }
         }
 
         function drawRocket() {
+            console.log("drawRocket function running");
             push();
             translate(300, rocketY);
-            
+
             // Rocket Body
             fill(rocketColor);
             rect(-20, 0, 40, 60, 5); // Rounded corners
@@ -626,18 +1013,18 @@
                 triangle(-15, 60, 15, 60, 0, 80 + rocketFlame);
                 fill(255, 69, 0);
                 triangle(-10, 60, 10, 60, 0, 70 + rocketFlame * 0.7);
-                
+
                 // Side booster flames
                 fill(255, 165, 0, 200);
                 triangle(-30, 50, -20, 50, -25, 60 + rocketFlame * 0.5);
                 triangle(20, 50, 30, 50, 25, 60 + rocketFlame * 0.5);
             }
-            
+
             // Stabilizing fins
             fill(lerpColor(color(rocketColor), color(50, 50, 50), 0.3));
             triangle(-20, 50, -20, 60, -35, 60);
             triangle(20, 50, 20, 60, 35, 60);
-            
+
             pop();
         }
 
@@ -651,73 +1038,6 @@
             }
         }
 
-        function updateSimulation() {
-            // Update fuel level
-            if (fuel > 0) {
-                fuel -= 0.2; // Consume fuel
-                fuelLevel.style.width = fuel + "%";
-                
-                // Create exhaust particles
-                if (frameCount % 2 === 0) {
-                    particles.push(new Particle(300, rocketY + 60, fuel/100));
-                }
-                
-                // Update acceleration based on remaining fuel
-                acceleration = (parseFloat(forceInput.value) / parseFloat(massInput.value)) * (fuel/100);
-            } else {
-                acceleration = 0; // No thrust when out of fuel
-                missionStatus.textContent = "MISSION: OUT OF FUEL";
-                missionStatus.style.background = "#FFC107";
-            }
-            
-            // Apply gravity (simplified)
-            acceleration -= 9.8; // Earth's gravity
-            
-            // Update velocity
-            velocity += acceleration * 0.1; // Scale for better visualization
-            
-            // Update position
-            let prevY = rocketY;
-            rocketY -= velocity;
-            
-            // Update altitude
-            altitude += (prevY - rocketY) * 10; // Scale for better display
-            if (altitude < 0) altitude = 0;
-            
-            // Track max altitude
-            if (altitude > maxAltitude) {
-                maxAltitude = altitude;
-            }
-            
-            // Update background gradient based on altitude
-            backgroundGradient = constrain(map(altitude, 0, 10000, 0, 1), 0, 1);
-            
-            // Update telemetry displays
-            accelerationDisplay.textContent = acceleration.toFixed(1) + " m/s²";
-            altitudeDisplay.textContent = Math.round(altitude) + " m";
-            velocityDisplay.textContent = Math.abs(velocity).toFixed(1) + " m/s";
-            
-            // Check for achievements
-            checkAchievements();
-            
-            // Handle rocket going out of viewport
-            if (rocketY < -100) {
-                missionStatus.textContent = "MISSION: LEFT ATMOSPHERE";
-                missionStatus.style.background = "#4CAF50";
-                achievements.spaceExplorer = true;
-                updateAchievements();
-            }
-            
-            // Detect crash landing (negative velocity but back on ground)
-            if (rocketY >= height - 100 && velocity < 0) {
-                rocketY = height - 100;
-                velocity = 0;
-                acceleration = 0;
-                missionStatus.textContent = "MISSION: CRASHED";
-                missionStatus.style.background = "#F44336";
-                launched = false;
-            }
-        }
 
         // Particle Class (Exhaust Effect)
         class Particle {
@@ -755,21 +1075,21 @@
 
         function updateMassValue() {
             let mass = massInput.value;
-            massValue.textContent = mass + " kg";
+            massValue.textContent = mass;
             updateForceBar();
         }
 
         function updateForceValue() {
             let force = forceInput.value;
-            forceValue.textContent = force + " N";
+            forceValue.textContent = force;
             updateForceBar();
         }
 
         function updateForceBar() {
             let force = parseFloat(forceInput.value);
             let percentage = Math.min(force / 10000 * 100, 100);
-            forceBar.style.width = percentage + "%";
-            forceLabel.textContent = percentage.toFixed(0) + "%";
+            forceBar.style.width = percentage + "%"; // Update the width of the force bar
+            forceLabel.textContent = percentage.toFixed(0) + "%"; // Update the label text
         }
 
         function launchRocket() {
@@ -781,20 +1101,26 @@
                     acceleration = force / mass;
                     launched = true;
                     fuel = 100; // Reset fuel
-                    fuelLevel.style.width = "100%";
-                    missionStatus.textContent = "MISSION: LAUNCHED";
-                    missionStatus.style.background = "#2196F3";
-                    launchButton.textContent = "IN FLIGHT 🔥";
-                    
+                    if (fuelLevel) fuelLevel.style.width = "100%";
+                    if (missionStatus) {
+                        missionStatus.textContent = "MISSION: LAUNCHED";
+                        missionStatus.style.background = "#2196F3";
+                    }
+                    if (launchButton) launchButton.textContent = "IN FLIGHT 🔥";
+
                     // Unlock first launch achievement
                     achievements.firstLaunch = true;
                     updateAchievements();
-                    
+
                     // Random rocket color for fun
                     rocketColor = random(colorOptions);
+
+                    // Initialize velocity to zero
+                    velocity = 0;
                 }
             }
         }
+
 
         function resetRocket() {
             launched = false;
@@ -805,16 +1131,16 @@
             altitude = 0;
             particles = [];
             backgroundGradient = 0;
-            
+
             // Reset UI
-            accelerationDisplay.textContent = "0 m/s²";
-            altitudeDisplay.textContent = "0 m";
-            velocityDisplay.textContent = "0 m/s";
+            accelerationDisplay.value = "0";
+            altitudeDisplay.textContent = "0";
+            velocityDisplay.textContent = "0";
             fuelLevel.style.width = "100%";
             missionStatus.textContent = "MISSION: READY FOR LAUNCH";
             missionStatus.style.background = "#E0E0E0";
             launchButton.textContent = "LAUNCH MISSION 🚀";
-            
+
             // Update controls based on current values
             updateMassValue();
             updateForceValue();
@@ -825,24 +1151,30 @@
             if (velocity > 20) {
                 achievements.escapeVelocity = true;
             }
-            
+
             updateAchievements();
         }
 
         function updateAchievements() {
-            // Update badge display
-            if (achievements.firstLaunch) {
+            if (badge1 && achievements.firstLaunch) {
                 badge1.classList.add('earned');
             }
-            
-            if (achievements.escapeVelocity) {
+            if (badge2 && achievements.escapeVelocity) {
                 badge2.classList.add('earned');
             }
-            
-            if (achievements.spaceExplorer) {
+            if (badge3 && achievements.spaceExplorer) {
                 badge3.classList.add('earned');
             }
         }
+        // Navigation functions
+        function goHome() {
+            window.location.href = "index.html";
+        }
+
+        function goToNextSimulation() {
+            window.location.href = "whats_next.html";
+        }
+
     </script>
 </body>
 
