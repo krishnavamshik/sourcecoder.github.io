@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+    // Initialize mermaid with settings for better rendering and interaction
+    mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'loose',
+        logLevel: 'error',
+        theme: 'default',
+        flowchart: {
+            nodeSpacing: 60,
+            rankSpacing: 80,
+            curve: 'basis'
+        }
+    });
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Analysis for Roadmap Generation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --secondary: #8338ec;
+            --accent: #ff006e;
+            --light: #ffffff;
+            --dark: #1a1a2e;
+            --gray: #f8f9fa;
+            --text: #333333;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --foundational: #ffe6e6;
+            --core: #e6f3ff;
+            --advanced: #e6ffe6;
+            --practical: #fff5e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--gray) 0%, #e9ecef 100%);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* Ensure container stretches to fit content */
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0.6;
+            z-index: 0;
+            transform: rotate(30deg);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .tag-line {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2.5rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: var(--gray);
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .submit-button:hover {
+            background-color: var(--secondary);
+        }
+
+        @media (max-width: 767px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .form-section {
+                padding: 1.5rem;
+            }
+        }
+
+        #roadmapResult {
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+            width: 90vw;
+            margin: 2rem auto;
+            position: relative;
+            overflow: visible;
+            /* Allow overflow for roadmap */
+        }
+
+        #roadmapResult h2 {
+            font-size: 2rem;
+            margin: 1rem;
+            color: var(--dark);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        #roadmapDiagram {
+            width: 100%;
+            position: relative;
+            overflow: visible;
+            /* Ensure diagram can overflow if needed */
+        }
+
+        .mermaid svg {
+            width: 100%;
+            height: auto;
+            background: #fafafa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transform-origin: center;
+        }
+
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node polygon {
+            stroke-width: 1.5px;
+            rx: 8px;
+            ry: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        .mermaid .node tspan {
+            font-size: 14px;
+            font-weight: 500;
+            fill: #333;
+        }
+
+        .mermaid .edgePath path {
+            stroke: #666;
+            stroke-width: 1.5px;
+            transition: stroke 0.2s;
+        }
+
+        .mermaid .edgeLabel {
+            background-color: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .mermaid .cluster rect {
+            fill: #f5f5f5;
+            stroke: #999;
+            stroke-width: 1px;
+            rx: 10px;
+            ry: 10px;
+        }
+
+        .mermaid .cluster tspan {
+            font-size: 16px;
+            font-weight: 600;
+            fill: #444;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            background-color: #fadbd8;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading-indicator img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .zoom-controls {
+            position: sticky;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+            margin-left: auto;
+            width: fit-content;
+        }
+
+        .zoom-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .zoom-button:hover {
+            background-color: var(--secondary);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Roadmap Generator</h1>
+            <p class="tag-line">Answer a few questions to generate your personalized learning roadmap</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="form-section">
+            <form id="roadmapForm">
+                <div class="form-group">
+                    <label for="learningGoal">1. What is your learning goal?</label>
+                    <input type="text" id="learningGoal" name="learningGoal"
+                        placeholder="Enter your learning goal (e.g., Learn Python Programming)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="proficiency_math">2. What is your proficiency in math?</label>
+                    <select id="proficiency_math" name="proficiency_math" required>
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Beginner">Beginner (Basic arithmetic & algebra skills)</option>
+                        <option value="Intermediate">Intermediate (Comfortable with calculus & equations)</option>
+                        <option value="Advanced">Advanced (Confident in mathematical modeling & problem-solving)
+                        </option>
+                        <option value="NA">Not applicable</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="proficiency_coding">3. What is your proficiency in coding?</label>
+                    <select id="proficiency_coding" name="proficiency_coding" required>
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Beginner">Beginner (Little or no coding experience)</option>
+                        <option value="Intermediate">Intermediate (Basic programming & scripting knowledge)</option>
+                        <option value="Advanced">Advanced (Comfortable with algorithms & development)</option>
+                        <option value="NA">Not applicable</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="purpose">4. What is the purpose of your learning goal?</label>
+                    <select id="purpose" name="purpose" required>
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Hobby">Personal Interest & Curiosity</option>
+                        <option value="Research">Research & Exploration</option>
+                        <option value="Academic">Academic Growth</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="timeInvestment">5. How much time are you willing to invest in learning this
+                        topic?</label>
+                    <select id="timeInvestment" name="timeInvestment" required>
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Quick">Quick Overview</option>
+                        <option value="Medium">Moderate Learning</option>
+                        <option value="Deep">Deep Dive</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-button">Generate Roadmap</button>
+                <div id="errorMessage" class="error-message"></div>
+                <div id="loadingIndicator" class="loading-indicator">
+                    <p>Generating your personalized roadmap...</p>
+                    <div class="spinner"
+                        style="border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 10px auto;">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="roadmapResult" style="display: none;">
+            <div class="zoom-controls">
+                <button class="zoom-button" id="zoomIn">+</button>
+                <button class="zoom-button" id="zoomOut">-</button>
+                <button class="zoom-button" id="resetZoom">Reset</button>
+            </div>
+            <h2>Your Learning Roadmap</h2>
+            <div id="roadmapDiagram"></div>
+        </div>
+    </div>
+
+    <script>
+        // Add a simple spinner animation
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            </style>
+        `);
+
+        // Define the displayRoadmap function with zoom and pan functionality
+        function displayRoadmap(raw) {
+            const roadmapResult = document.getElementById('roadmapResult');
+            const roadmapDiagram = document.getElementById('roadmapDiagram');
+            const errorMessage = document.getElementById('errorMessage');
+
+            try {
+                // Clean up Mermaid code and apply custom styling
+                let mermaidCode = raw;
+                mermaidCode = mermaidCode.replace(/^```mermaid\s*/g, '').replace(/\s*```$/g, '');
+                if (!mermaidCode.trim().startsWith('graph')) {
+                    mermaidCode = 'graph TD\n' + mermaidCode;
+                }
+
+                // Add custom styles to the Mermaid diagram
+                const styledMermaidCode = `
+                    ${mermaidCode}
+                    %% Custom styles for readability
+                    classDef foundational fill:${getComputedStyle(document.documentElement).getPropertyValue('--foundational')},stroke:#ff6666,stroke-width:1px;
+                    classDef core fill:${getComputedStyle(document.documentElement).getPropertyValue('--core')},stroke:#3399ff,stroke-width:1px;
+                    classDef advanced fill:${getComputedStyle(document.documentElement).getPropertyValue('--advanced')},stroke:#33cc33,stroke-width:1px;
+                    classDef practical fill:${getComputedStyle(document.documentElement).getPropertyValue('--practical')},stroke:#ffaa33,stroke-width:1px;
+                `;
+
+                roadmapDiagram.innerHTML = `<div class="mermaid">${styledMermaidCode}</div>`;
+
+                mermaid.render('mermaid-svg', styledMermaidCode).then(result => {
+                    roadmapDiagram.innerHTML = result.svg;
+                    roadmapResult.style.display = 'block';
+                    errorMessage.style.display = 'none';
+
+                    // Add zoom and pan functionality
+                    const svg = roadmapDiagram.querySelector('svg');
+                    let scale = 1;
+                    let panX = 0;
+                    let panY = 0;
+                    let isDragging = false;
+                    let startX, startY;
+
+                    // Zoom controls
+                    document.getElementById('zoomIn').addEventListener('click', () => {
+                        scale *= 1.2;
+                        updateTransform();
+                    });
+
+                    document.getElementById('zoomOut').addEventListener('click', () => {
+                        scale /= 1.2;
+                        updateTransform();
+                    });
+
+                    document.getElementById('resetZoom').addEventListener('click', () => {
+                        scale = 1;
+                        panX = 0;
+                        panY = 0;
+                        updateTransform();
+                    });
+
+                    // Mouse wheel zoom
+                    roadmapDiagram.addEventListener('wheel', (e) => {
+                        e.preventDefault();
+                        const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                        scale *= delta;
+                        updateTransform();
+                    });
+
+                    // Pan functionality
+                    roadmapDiagram.addEventListener('mousedown', (e) => {
+                        isDragging = true;
+                        startX = e.clientX - panX;
+                        startY = e.clientY - panY;
+                        roadmapDiagram.style.cursor = 'grabbing';
+                    });
+
+                    roadmapDiagram.addEventListener('mousemove', (e) => {
+                        if (isDragging) {
+                            panX = e.clientX - startX;
+                            panY = e.clientY - startY;
+                            updateTransform();
+                        }
+                    });
+
+                    roadmapDiagram.addEventListener('mouseup', () => {
+                        isDragging = false;
+                        roadmapDiagram.style.cursor = 'grab';
+                    });
+
+                    roadmapDiagram.addEventListener('mouseleave', () => {
+                        isDragging = false;
+                        roadmapDiagram.style.cursor = 'grab';
+                    });
+
+                    function updateTransform() {
+                        svg.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+                    }
+
+                    // Add interactivity: Highlight paths and nodes on hover
+                    const nodes = roadmapDiagram.querySelectorAll('.node');
+                    const edges = roadmapDiagram.querySelectorAll('.edgePath path');
+
+                    nodes.forEach(node => {
+                        node.addEventListener('mouseover', () => {
+                            node.querySelector('rect, circle, polygon').style.filter = 'brightness(1.1)';
+                            // Highlight connected edges
+                            const nodeId = node.id;
+                            edges.forEach(edge => {
+                                const edgeId = edge.parentElement.id;
+                                if (edgeId.includes(nodeId)) {
+                                    edge.style.stroke = '#ff006e';
+                                    edge.style.strokeWidth = '2.5px';
+                                }
+                            });
+                        });
+
+                        node.addEventListener('mouseout', () => {
+                            node.querySelector('rect, circle, polygon').style.filter = 'brightness(1)';
+                            edges.forEach(edge => {
+                                edge.style.stroke = '#666';
+                                edge.style.strokeWidth = '1.5px';
+                            });
+                        });
+
+                        // Zoom to node on click
+                        node.addEventListener('click', () => {
+                            const bbox = node.getBBox();
+                            const svgRect = svg.getBoundingClientRect();
+                            scale = 1.5;
+                            panX = -(bbox.x + bbox.width / 2) * scale + svgRect.width / 2;
+                            panY = -(bbox.y + bbox.height / 2) * scale + svgRect.height / 2;
+                            updateTransform();
+                        });
+                    });
+
+                    // Scroll to roadmap after rendering
+                    roadmapResult.scrollIntoView({ behavior: 'smooth' });
+                }).catch(err => {
+                    console.error("Mermaid rendering error:", err);
+                    errorMessage.textContent = "There was an error rendering your roadmap. Please try again.";
+                    errorMessage.style.display = 'block';
+
+                    // Fallback to simple visualization
+                    roadmapDiagram.innerHTML = `
+                        <div style="border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+                            <h3>Learning Path for Selected Goal</h3>
+                            <ul style="margin-top: 15px; line-height: 1.8;">
+                                <li>🏁 Starting point: Foundational concepts</li>
+                                <li>📚 Core principles and theory</li>
+                                <li>🔍 Practical applications and examples</li>
+                                <li>💪 Practice and exercises</li>
+                                <li>🏆 Advanced topics and mastery</li>
+                            </ul>
+                        </div>
+                    `;
+                    roadmapResult.style.display = 'block';
+                    roadmapResult.scrollIntoView({ behavior: 'smooth' });
+                });
+            } catch (error) {
+                console.error("Error processing diagram:", error);
+                errorMessage.textContent = "There was an error processing your roadmap. Please try again.";
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        // Form submission handler with loading indicator and error handling
+        document.getElementById('roadmapForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const errorMessage = document.getElementById('errorMessage');
+            const submitButton = document.querySelector('.submit-button');
+
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            submitButton.disabled = true;
+            errorMessage.style.display = 'none';
+
+            const formData = {
+                learningGoal: document.getElementById('learningGoal').value,
+                proficiency_math: document.getElementById('proficiency_math').value,
+                proficiency_coding: document.getElementById('proficiency_coding').value,
+                purpose: document.getElementById('purpose').value,
+                timeInvestment: document.getElementById('timeInvestment').value
+            };
+
+            try {
+                const response = await fetch('/generate-roadmap', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                submitButton.disabled = false;
+
+                if (!response.ok) {
+                    throw new Error(`Server responded with ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // Check for the presence of the success property
+                if (result.success) {
+                    window.location.href = `/roadmap_viewer.html?goal=${encodeURIComponent(formData.learningGoal)}&level=${encodeURIComponent(formData.proficiency_coding)}&time=${encodeURIComponent(formData.timeInvestment)}&purpose=${encodeURIComponent(formData.purpose)}&roadmap=${encodeURIComponent(result.roadmap)}`;
+                } else {
+                    errorMessage.textContent = result.error || 'Failed to generate roadmap';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                loadingIndicator.style.display = 'none';
+                submitButton.disabled = false;
+                errorMessage.textContent = 'An error occurred while generating the roadmap';
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>
