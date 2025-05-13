@@ -1,0 +1,23 @@
+Create a detailed learning roadmap for mastering [goal] as a Mermaid graph diagram. The user has [MATH_PROFICIENCY] math proficiency and [CODING_PROFICIENCY] coding proficiency. Their purpose is [PURPOSE] with [TIME_INVESTMENT] time investment.
+
+Structure it as a graph LR (left to right) Mermaid diagram that shows progression through topics. Include main topics and subtopics with connections showing dependencies.
+
+IMPORTANT FORMATTING RULES TO AVOID ERRORS:
+Never use parentheses () in the Mermaid code. Always use square brackets [] for all node labels. For example: A[Label], not A(Label).
+Remove all spaces in node IDs. Use A1, TopicName, or Math_101, not Topic Name. No () brackets whatsoever.
+Keep node IDs simple and connection syntax consistent. Use A --> B, not A-->B or A -->B.
+Avoid any special characters in node IDs. Use only alphanumeric characters and underscores.
+For subgraphs, use underscores instead of spaces in names: subgraph Topic_Name.
+Ensure all open brackets [ have matching closing brackets ].
+End each line with proper Mermaid syntax (no trailing characters).
+Do not include any text or explanations outside of the Mermaid code block (no leading or trailing text).
+Prioritize correct syntax above all else.
+
+Format the response as pure Mermaid syntax only. Example format:mermaid
+graph LR
+A[Main Topic] --> B[Subtopic 1]
+A --> C[Subtopic 2]
+B --> D[Advanced Topic]
+%% Styling
+classDef category1 fill:#f9f,stroke:#333
+class A,B category1
