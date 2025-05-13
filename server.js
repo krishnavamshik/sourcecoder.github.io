@@ -3,22 +3,21 @@ require("dotenv").config(); // Load environment variables
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { Pool } = require("pg");
+const { Pool, Client } = require("pg");
 const path = require("path");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require("fs");
 
 const app = express();
-const PORT = 3000;
+// Render injects the desired port via the PORT env var
+const PORT = process.env.PORT || 3000;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Database connection
+// Database connection (always use SSL on Render)
 // ─────────────────────────────────────────────────────────────────────────────
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL.includes("render.com")
-    ? { rejectUnauthorized: false }
-    : false,
+  ssl: { rejectUnauthorized: false }, // Force encrypted connection
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -47,21 +46,21 @@ async function askGemini(promptStr) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
   const result = await model.generateContent(promptStr);
   const rawText = result.response.text();
-  console.log(rawText)
+  console.log(rawText);
 
   // Clean up the Mermaid syntax
   let mermaidText = rawText;
 
   // Remove markdown code fences if present
-  mermaidText = mermaidText.replace(/```mermaid\s*/g, '').replace(/```\s*$/g, '');
+  mermaidText = mermaidText.replace(/```mermaid\s*/g, "").replace(/```\s*$/g, "");
 
   // Ensure it starts with "graph"
-  if (!mermaidText.trim().startsWith('graph')) {
-    mermaidText = 'graph TD\n' + mermaidText;
+  if (!mermaidText.trim().startsWith("graph")) {
+    mermaidText = "graph TD\n" + mermaidText;
   }
 
   // Basic validation - make sure it has nodes
-  if (!mermaidText.includes('-->') && !mermaidText.includes('---')) {
+  if (!mermaidText.includes("-->") && !mermaidText.includes("---")) {
     mermaidText = `graph TD
     A[Start: ${promptStr.substring(0, 20)}...] --> B[Core Concepts]
     B --> C[Practice & Application]
@@ -69,12 +68,13 @@ async function askGemini(promptStr) {
   }
 
   // Make sure there's no HTML or other non-mermaid content
-  mermaidText = mermaidText.split('\n')
-    .filter(line => !line.trim().startsWith('<'))
-    .join('\n');
+  mermaidText = mermaidText
+    .split("\n")
+    .filter((line) => !line.trim().startsWith("<"))
+    .join("\n");
 
   // Remove parentheses
-  mermaidText = mermaidText.replace(/[()]/g, '');
+  mermaidText = mermaidText.replace(/[()]/g, "");
   mermaidText = ensureHasEdges(mermaidText);
 
   console.log("Cleaned Mermaid diagram:", mermaidText);
@@ -83,11 +83,11 @@ async function askGemini(promptStr) {
 
 function ensureHasEdges(src) {
   const edgeCount = (src.match(/-->/g) || []).length;
-  if (edgeCount >= 3) return src;                      // looks fine already
+  if (edgeCount >= 3) return src; // looks fine already
 
   // Collect every node id “[id[” (before first “[”)
-  const nodeLines = src.split("\n").filter(l => /\[/.test(l));
-  const ids = nodeLines.map(l => l.match(/^(\w+)/)?.[1]).filter(Boolean);
+  const nodeLines = src.split("\n").filter((l) => /\[/.test(l));
+  const ids = nodeLines.map((l) => l.match(/^(\w+)/)?.[1]).filter(Boolean);
   if (!ids.length) return src; // nothing we can do
 
   let repaired = "graph LR\n";
@@ -111,13 +111,22 @@ app.use(
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-const { Client } = require('pg');
+// ─────────────────────────────────────────────────────────────────────────────
+// Connectivity sanity‑check (optional)
+// ─────────────────────────────────────────────────────────────────────────────
 (async () => {
-  const client = new Client({ connectionString: process.env.DATABASE_URL });
-  await client.connect();
-  const res = await client.query('SELECT current_database(), current_schema()');
-  console.log('🔍 Connected to:', res.rows);
-  await client.end();
+  try {
+    const client = new Client({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }, // same SSL rule
+    });
+    await client.connect();
+    const res = await client.query("SELECT current_database(), current_schema()");
+    console.log("🔍 Connected to:", res.rows);
+    await client.end();
+  } catch (err) {
+    console.error("🚨 DB self‑test failed:", err.message);
+  }
 })();
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -170,16 +179,8 @@ app.post("/generate-roadmap", async (req, res) => {
     timeInvestment,
   } = req.body;
 
-  if (
-    !learningGoal ||
-    !proficiency_math ||
-    !proficiency_coding ||
-    !purpose ||
-    !timeInvestment
-  ) {
-    return res
-      .status(400)
-      .json({ success: false, error: "All fields are required" });
+  if (!learningGoal || !proficiency_math || !proficiency_coding || !purpose || !timeInvestment) {
+    return res.status(400).json({ success: false, error: "All fields are required" });
   }
 
   try {
@@ -192,18 +193,11 @@ app.post("/generate-roadmap", async (req, res) => {
          AND purpose=$4
          AND time_investment=$5
        LIMIT 1`,
-      [
-        learningGoal,
-        proficiency_math,
-        proficiency_coding,
-        purpose,
-        timeInvestment,
-      ]
+      [learningGoal, proficiency_math, proficiency_coding, purpose, timeInvestment]
     );
 
     if (rows.length) {
       console.log("♻️  Reusing cached roadmap");
-      // Return the raw mermaid text directly from the database
       return res.json({ success: true, roadmap: rows[0].roadmap });
     }
 
@@ -220,20 +214,12 @@ app.post("/generate-roadmap", async (req, res) => {
     const mermaid = await askGemini(prompt);
 
     // 3️⃣  store raw mermaid text in DB for future reuse
-    const insertQuery = `
-    INSERT INTO roadmaps
-    (learning_goal, math_proficiency, coding_proficiency, purpose, time_investment, roadmap)
-    VALUES ($1, $2, $3, $4, $5, $6)
-  `;
-
-    await pool.query(insertQuery, [
-      learningGoal,
-      proficiency_math,
-      proficiency_coding,
-      purpose,
-      timeInvestment,
-      mermaid
-    ]);
+    await pool.query(
+      `INSERT INTO roadmaps
+       (learning_goal, math_proficiency, coding_proficiency, purpose, time_investment, roadmap)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [learningGoal, proficiency_math, proficiency_coding, purpose, timeInvestment, mermaid]
+    );
 
     console.log("✅ New roadmap cached");
     res.json({ success: true, roadmap: mermaid });
@@ -244,7 +230,7 @@ app.post("/generate-roadmap", async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Other existing routes (signup, feedback, etc.)
+// Signup & feedback routes
 // ─────────────────────────────────────────────────────────────────────────────
 app.post("/signup", async (req, res) => {
   const { name, email } = req.body;
@@ -252,10 +238,7 @@ app.post("/signup", async (req, res) => {
     return res.status(400).json({ error: "Name and email are required" });
   }
   try {
-    await pool.query(
-      "INSERT INTO signups (name, email) VALUES ($1,$2)",
-      [name, email]
-    );
+    await pool.query("INSERT INTO signups (name, email) VALUES ($1,$2)", [name, email]);
     res.json({ message: "✅ Signup successful" });
   } catch (e) {
     console.error("Signup error:", e);
@@ -266,9 +249,7 @@ app.post("/signup", async (req, res) => {
 app.post("/feedback", async (req, res) => {
   const { email, topic_vote, feedback } = req.body;
   if (!email || !topic_vote || !feedback) {
-    return res
-      .status(400)
-      .json({ error: "Email, topic vote, and feedback are required" });
+    return res.status(400).json({ error: "Email, topic vote, and feedback are required" });
   }
   try {
     await pool.query(
@@ -290,6 +271,6 @@ app.get("/", (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // start server
 // ─────────────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀  Server running on port ${PORT}`);
 });
